@@ -14,6 +14,8 @@ namespace XML_WS_AgencyApp
             ApplicationDbContext AppContext = ApplicationDbContext.Create();
             Initializer Initializer = new Initializer();
             Initializer.InitializeDatabase(AppContext);
+
+            AppContext.addInitialUsers();
         }
     }
 }

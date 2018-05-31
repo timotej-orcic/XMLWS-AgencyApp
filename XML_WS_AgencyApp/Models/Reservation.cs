@@ -10,13 +10,26 @@ namespace XML_WS_AgencyApp.Models
         [Key]
         public long Id { get; set; }
 
+        [Required]
         public DateTime From { get; set; }
+
+        [Required]
         public DateTime To { get; set; }
-        public decimal Price { get; set; }
+
+        [Required]
+        public double TotalPrice { get; set; }
+
+        [Required]
         public bool Confirmed { get; set; }
-        public short Rating { get; set; }
-        public string Comment { get; set; }
-        public string Name { get; set; }
-        public string Surname { get; set; }
+
+        [Required]
+        [MaxLength(60)]
+        public string SubjectName { get; set; }
+
+        [Required]
+        [MaxLength(60)]
+        public string SubjectSurname { get; set; }
+
+        public BookingUnit BookingUnit { get; set; }
     }
 }

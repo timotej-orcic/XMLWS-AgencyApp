@@ -75,22 +75,32 @@ namespace XML_WS_AgencyApp.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-            switch (result)
+            var user = UserManager.FindByEmail(model.Email);
+            if (user == null)
             {
-                case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
-                    return View(model);
+                ModelState.AddModelError("", "User with that email is not registered.");
+                return View(model);
+            }
+            else
+            {
+                var result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, false, shouldLockout: false);
+                switch (result)
+                {
+                    case SignInStatus.Success:
+                        return RedirectToAction("Index", "Home");
+                    case SignInStatus.LockedOut:
+                        return View("Lockout");
+                    case SignInStatus.RequiresVerification:
+                        return RedirectToAction("SendCode", new { ReturnUrl = returnUrl });
+                    case SignInStatus.Failure:
+                    default:
+                        ModelState.AddModelError("", "Invalid login attempt.");
+                        return View(model);
+                }
             }
         }
 
+        /*
         //
         // GET: /Account/VerifyCode
         [AllowAnonymous]
@@ -133,7 +143,9 @@ namespace XML_WS_AgencyApp.Controllers
                     return View(model);
             }
         }
+        */
 
+        /*
         //
         // GET: /Account/Register
         [AllowAnonymous]
@@ -171,13 +183,14 @@ namespace XML_WS_AgencyApp.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+        */
 
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
-        public async Task<ActionResult> ConfirmEmail(string userId, string code)
+        public async Task<ActionResult> ConfirmEmail(long userId, string code)
         {
-            if (userId == null || code == null)
+            if (userId == default(long) || code == null)
             {
                 return View("Error");
             }
@@ -271,6 +284,7 @@ namespace XML_WS_AgencyApp.Controllers
             return View();
         }
 
+        /*
         //
         // POST: /Account/ExternalLogin
         [HttpPost]
@@ -288,7 +302,7 @@ namespace XML_WS_AgencyApp.Controllers
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
         {
             var userId = await SignInManager.GetVerifiedUserIdAsync();
-            if (userId == null)
+            if (userId == default(long))
             {
                 return View("Error");
             }
@@ -384,6 +398,7 @@ namespace XML_WS_AgencyApp.Controllers
             ViewBag.ReturnUrl = returnUrl;
             return View(model);
         }
+        */
 
         //
         // POST: /Account/LogOff
@@ -395,6 +410,7 @@ namespace XML_WS_AgencyApp.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        /*
         //
         // GET: /Account/ExternalLoginFailure
         [AllowAnonymous]
@@ -422,6 +438,7 @@ namespace XML_WS_AgencyApp.Controllers
 
             base.Dispose(disposing);
         }
+        */
 
         #region Helpers
         // Used for XSRF protection when adding external logins

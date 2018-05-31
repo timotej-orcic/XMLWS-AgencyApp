@@ -9,6 +9,10 @@ namespace XML_WS_AgencyApp.Models
         [Key]
         public long Id { get; set; }
 
-        public string ImageUrl { get; set; }
+        [Required]
+        [MaxLength(1000)]
+        public string Value { get; set; }
+
+        public BookingUnit BookingUnit { get; set; }
     }
 }
