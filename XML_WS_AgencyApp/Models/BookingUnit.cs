@@ -25,6 +25,7 @@ namespace XML_WS_AgencyApp.Models
 
         public ApplicationUser Agent { get; set; }
 
+        [Required]
         public AccomodationType AccomodationType { get; set; }
 
         public AccomodationCategory AccomodationCategory { get; set; }

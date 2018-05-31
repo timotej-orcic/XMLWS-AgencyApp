@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Agent Page";
+}
+
+<h2 style="text-align:center;">Welcome <b style="color:#757575">@User.Identity.Name</b></h2>
+<br />
+<br />
+<br />
+<h3>Options:</h3>
+<br />
+<ul style="list-style-type:none">
+    <li style="margin-top:10px;">@Html.ActionLink("Add new booking unit", "AddNewBookingUnit", "Agent", routeValues: null, htmlAttributes: new { @class = "btn btn-success" })</li>
+    <li style="margin-top:10px;">@Html.ActionLink("Manage booking units", "ManageBookingUnits", "Agent", routeValues: null, htmlAttributes: new { @class = "btn btn-warning" })</li>
+    <li style="margin-top:10px;">@Html.ActionLink("Client messaging", "ClientMessaging", "Agent", routeValues: null, htmlAttributes: new { @class = "btn btn-primary" })</li>
+    <li style="margin-top:10px;">@Html.ActionLink("Confirm reservations", "ConfirmReservations", "Agent", routeValues: null, htmlAttributes: new { @class = "btn btn-danger" })</li>
+</ul>
