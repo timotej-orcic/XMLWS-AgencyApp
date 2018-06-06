@@ -3,8 +3,8 @@
     ViewBag.Title = "Add new booking unit";
 }
 
-<h2 style="color:white">Add new administrator:</h2>
-@using (Html.BeginForm("AddAdmin", "System_Admin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+<h2 style="color:black">Add new booking unit:</h2>
+@using (Html.BeginForm("AddAdmin", "Agent", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
     <hr />
@@ -13,10 +13,10 @@
         <div class="row">
             <div class="col-sm-5">
                 <div class="form-group">
-                    <label class="control-label col-xs-3" style="color:white">Admin type</label>
+                    <label class="control-label col-xs-3" style="color:black">Country</label>
                     <div class="col-xs-9">
-                        @Html.DropDownListFor(m => m.Admin_Type, (IEnumerable<SelectListItem>)ViewBag.items, new { @class = "form-control", @id = "optionId" })
-                        @Html.ValidationMessageFor(m => m.Admin_Type, "", new { @class = "text-danger" })
+                        @Html.DropDownListFor(m => Model.CountryId, new SelectList(Model.CountriesList, "Value", "Text"), htmlAttributes: new { @class = "form-control", id = "Country" })
+                        @Html.ValidationMessageFor(m => m.CountryId, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </div>
@@ -24,10 +24,10 @@
         <div class="row">
             <div class="col-sm-5">
                 <div class="form-group">
-                    <label class="control-label col-xs-3" style="color:white">First name</label>
+                    <label class="control-label col-xs-3" style="color:black">City</label>
                     <div class="col-xs-9">
-                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+                        @Html.DropDownListFor(m => Model.CityId, new SelectList(Model.CitiesList, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "City" })
+                        @Html.ValidationMessageFor(m => m.CityId, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </div>
@@ -35,10 +35,10 @@
         <div class="row">
             <div class="col-sm-5">
                 <div class="form-group">
-                    <label class="control-label col-xs-3" style="color:white">Last name</label>
+                    <label class="control-label col-xs-3" style="color:black">Address</label>
                     <div class="col-xs-9">
-                        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+                        @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </div>
@@ -46,10 +46,10 @@
         <div class="row">
             <div class="col-sm-5">
                 <div class="form-group">
-                    <label class="control-label col-xs-3" style="color:white">Email</label>
+                    <label class="control-label col-xs-3" style="color:black">Description</label>
                     <div class="col-xs-9">
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        @Html.TextAreaFor(m => m.Description, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </div>
@@ -57,21 +57,32 @@
         <div class="row">
             <div class="col-sm-5">
                 <div class="form-group">
-                    <label class="control-label col-xs-3" style="color:white">User name</label>
+                    <label class="control-label col-xs-3" style="color:black">Guest capacity</label>
                     <div class="col-xs-9">
-                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                        @Html.TextBoxFor(m => m.PeopleNo, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.PeopleNo, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row" id="controlId" style="display: none">
+        <div class="row">
             <div class="col-sm-5">
                 <div class="form-group">
-                    <label class="control-label col-xs-3" style="color:white">My location</label>
+                    <label class="control-label col-xs-3" style="color:black">Accomodation type</label>
                     <div class="col-xs-9">
-                        @Html.DropDownListFor(m => m.MyLocationId, new SelectList(ViewBag.locations, "Id", "Name"), new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.MyLocationId, "", new { @class = "text-danger" })
+                        @Html.DropDownListFor(m => Model.AccomodationTypeId, new SelectList(Model.AccomodationTypesList, "Value", "Text"), htmlAttributes: new { @class = "form-control"})
+                        @Html.ValidationMessageFor(m => m.AccomodationTypeId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <label class="control-label col-xs-3" style="color:white">Images</label>
+                    <div class="col-xs-9">
+                        @Html.TextBoxFor(m => m.Images, new { type = "file", @class = "form-control", @maxlength = 4000 })
+                        @Html.ValidationMessageFor(m => m.Images, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </div>
@@ -85,4 +96,32 @@
             </div>
         </div>
     </form>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+            $('#Country').change(function () {
+                var selectedCountry = $("#Country").val();
+                var citiesSelect = $('#City');
+                citiesSelect.empty();
+                if (selectedCountry != null && selectedCountry != '') {
+                    $.getJSON('@Url.Action("GetCitiesByCountryId")', { countryId: selectedCountry }, function (cities) {
+                        if (cities != null && !jQuery.isEmptyObject(cities))
+                        {
+                            citiesSelect.append($('<option/>', {
+                                value: null,
+                                text: ""
+                            }));
+                            $.each(cities, function (index, city) {
+                                citiesSelect.append($('<option/>', {
+                                    value: city.Value,
+                                    text: city.Text
+                                }));
+                            });
+                        };
+                    });
+                }
+            });
+    </script>
 }
