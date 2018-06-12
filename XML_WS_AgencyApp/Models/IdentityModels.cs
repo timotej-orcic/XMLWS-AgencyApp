@@ -68,11 +68,16 @@ namespace XML_WS_AgencyApp.Models
         public DbSet<City> Cities { get; set; }
         public DbSet<AccomodationType> AccomodationTypes { get; set; }
         public DbSet<BookingUnit> BookingUnits { get; set; }
+        public DbSet<BonusFeatures> BonusFeatures { get; set; }
+        public DbSet<BookingUnitPicture> Pictures { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder mb)
         {
             mb.Entity<ApplicationUser>().Property(x => x.Email).HasMaxLength(90);
             mb.Entity<ApplicationUser>().Property(x => x.UserName).HasMaxLength(60);
+
+
+
             base.OnModelCreating(mb);
         }
 

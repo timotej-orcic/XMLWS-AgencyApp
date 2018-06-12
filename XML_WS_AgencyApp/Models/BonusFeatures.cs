@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace XML_WS_AgencyApp.Models
@@ -12,5 +13,7 @@ namespace XML_WS_AgencyApp.Models
         [Required]
         [MaxLength(60)]
         public string Name { get; set; }
+
+        public ICollection<BookingUnit> BookingUnits { get; set; }
     }
 }

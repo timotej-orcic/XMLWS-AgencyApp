@@ -9,6 +9,10 @@ namespace XML_WS_AgencyApp.Models
 {
     public class AddNewBookingUnitViewModel
     {
+        [Required(ErrorMessage = "The name field is required")]
+        [MaxLength(60, ErrorMessage = "Max length is 60 characters")]
+        public string Name { get; set; }
+
         [Required(ErrorMessage = "The adress field is required")]
         [MaxLength(90, ErrorMessage = "Max length is 90 characters")]
         public string Address { get; set; }
@@ -35,10 +39,17 @@ namespace XML_WS_AgencyApp.Models
 
         [Required(ErrorMessage = "At least one image is required")]
         [DataType(DataType.Upload)]
-        public HttpPostedFileBase Images { get; set; }
+        public HttpPostedFileBase[] Images { get; set; }
 
-        public List<BonusFeatures> BonusFeatures { get; set; }
+        public List<BonusFeaturesViewModel> BonusFeatures { get; set; }
+    }
 
-        public List<MonthlyPrices> MonthlyPrices { get; set; }
+    public class BonusFeaturesViewModel
+    {
+        public long Id { get; set; }
+
+        public string Name { get; set; }
+
+        public bool IsSelected { get; set; }
     }
 }

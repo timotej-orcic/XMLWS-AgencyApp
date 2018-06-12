@@ -81,6 +81,34 @@ namespace XML_WS_AgencyApp
 
             ctx.AccomodationTypes.Add(apartment);
 
+            BonusFeatures wifi = new BonusFeatures
+            {
+                Name = "wi-fi"
+            };
+
+            ctx.BonusFeatures.Add(wifi);
+
+            BonusFeatures tv = new BonusFeatures
+            {
+                Name = "TV"
+            };
+
+            ctx.BonusFeatures.Add(tv);
+
+            BonusFeatures fridge = new BonusFeatures
+            {
+                Name = "Refrigiratior"
+            };
+
+            ctx.BonusFeatures.Add(fridge);
+
+            BonusFeatures ac = new BonusFeatures
+            {
+                Name = "Air conditioner"
+            };
+
+            ctx.BonusFeatures.Add(ac);
+
             ctx.SaveChanges();
         }
     }

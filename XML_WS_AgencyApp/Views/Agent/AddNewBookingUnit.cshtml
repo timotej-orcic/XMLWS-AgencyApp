@@ -3,8 +3,8 @@
     ViewBag.Title = "Add new booking unit";
 }
 
-<h2 style="color:black">Add new booking unit:</h2>
-@using (Html.BeginForm("AddAdmin", "Agent", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+<h2 style="color:#757575">Add new booking unit:</h2>
+@using (Html.BeginForm("AddBookingUnit", "Agent", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     <hr />
@@ -13,7 +13,18 @@
         <div class="row">
             <div class="col-sm-5">
                 <div class="form-group">
-                    <label class="control-label col-xs-3" style="color:black">Country</label>
+                    <label class="control-label col-xs-3" style="color:#444444">Name</label>
+                    <div class="col-xs-9">
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <label class="control-label col-xs-3" style="color:#444444">Country</label>
                     <div class="col-xs-9">
                         @Html.DropDownListFor(m => Model.CountryId, new SelectList(Model.CountriesList, "Value", "Text"), htmlAttributes: new { @class = "form-control", id = "Country" })
                         @Html.ValidationMessageFor(m => m.CountryId, "", new { @class = "text-danger" })
@@ -24,7 +35,7 @@
         <div class="row">
             <div class="col-sm-5">
                 <div class="form-group">
-                    <label class="control-label col-xs-3" style="color:black">City</label>
+                    <label class="control-label col-xs-3" style="color:#444444">City</label>
                     <div class="col-xs-9">
                         @Html.DropDownListFor(m => Model.CityId, new SelectList(Model.CitiesList, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "City" })
                         @Html.ValidationMessageFor(m => m.CityId, "", new { @class = "text-danger" })
@@ -35,7 +46,7 @@
         <div class="row">
             <div class="col-sm-5">
                 <div class="form-group">
-                    <label class="control-label col-xs-3" style="color:black">Address</label>
+                    <label class="control-label col-xs-3" style="color:#444444">Address</label>
                     <div class="col-xs-9">
                         @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
@@ -46,7 +57,7 @@
         <div class="row">
             <div class="col-sm-5">
                 <div class="form-group">
-                    <label class="control-label col-xs-3" style="color:black">Description</label>
+                    <label class="control-label col-xs-3" style="color:#444444">Description</label>
                     <div class="col-xs-9">
                         @Html.TextAreaFor(m => m.Description, new { @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
@@ -57,7 +68,7 @@
         <div class="row">
             <div class="col-sm-5">
                 <div class="form-group">
-                    <label class="control-label col-xs-3" style="color:black">Guest capacity</label>
+                    <label class="control-label col-xs-3" style="color:#444444">Guest capacity</label>
                     <div class="col-xs-9">
                         @Html.TextBoxFor(m => m.PeopleNo, new { @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.PeopleNo, "", new { @class = "text-danger" })
@@ -68,7 +79,7 @@
         <div class="row">
             <div class="col-sm-5">
                 <div class="form-group">
-                    <label class="control-label col-xs-3" style="color:black">Accomodation type</label>
+                    <label class="control-label col-xs-3" style="color:#444444">Accomodation type</label>
                     <div class="col-xs-9">
                         @Html.DropDownListFor(m => Model.AccomodationTypeId, new SelectList(Model.AccomodationTypesList, "Value", "Text"), htmlAttributes: new { @class = "form-control"})
                         @Html.ValidationMessageFor(m => m.AccomodationTypeId, "", new { @class = "text-danger" })
@@ -79,14 +90,37 @@
         <div class="row">
             <div class="col-sm-5">
                 <div class="form-group">
-                    <label class="control-label col-xs-3" style="color:white">Images</label>
+                    <label class="control-label col-xs-3" style="color:#444444">Images</label>
                     <div class="col-xs-9">
-                        @Html.TextBoxFor(m => m.Images, new { type = "file", @class = "form-control", @maxlength = 4000 })
+                        @Html.TextBoxFor(m => m.Images, new { @type = "file", @multiple = "multiple", @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.Images, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </div>
         </div>
+        <hr />
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <h3 class="control-label col-xs-5" style="color:#757575">Bonus features:</h3>
+                    <div class="col-xs-7"></div>
+                </div>
+            </div>
+        </div>
+        @for (int i = 0; i < Model.BonusFeatures.Count; i++)
+        {
+            <div class="row">
+                <div class="col-sm-5">
+                    <div class="form-group">
+                        <label class="col-xs-6" style="color:#444444; text-align:right">@Model.BonusFeatures[i].Name</label>
+                        <div class="col-xs-6">
+                            @Html.CheckBoxFor(m => m.BonusFeatures[i].IsSelected)
+                            @Html.HiddenFor(m => m.BonusFeatures[i].Id)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
         <div class="row">
             <div class="col-sm-5">
                 <div class="col-xs-9"></div>

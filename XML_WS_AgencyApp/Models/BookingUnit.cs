@@ -11,6 +11,10 @@ namespace XML_WS_AgencyApp.Models
         public long Id { get; set; }
 
         [Required]
+        [MaxLength(60)]
+        public string Name { get; set; }
+
+        [Required]
         [MaxLength(90)]
         public string Address { get; set; }
 
@@ -25,13 +29,14 @@ namespace XML_WS_AgencyApp.Models
 
         public ApplicationUser Agent { get; set; }
 
-        [Required]
         public AccomodationType AccomodationType { get; set; }
 
         public AccomodationCategory AccomodationCategory { get; set; }
 
-        public List<BookingUnitPicture> Pictures { get; set; }
+        public ICollection<BookingUnitPicture> Pictures { get; set; }
 
-        public List<BonusFeatures> BonusFeatures { get; set; }
+        public ICollection<BonusFeatures> BonusFeatures { get; set; }
+
+        public ICollection<Reservation> Reservations { get; set; }
     }
 }
