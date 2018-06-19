@@ -97,7 +97,7 @@ namespace XML_WS_AgencyApp
 
             BonusFeatures fridge = new BonusFeatures
             {
-                Name = "Refrigiratior"
+                Name = "Refrigirator"
             };
 
             ctx.BonusFeatures.Add(fridge);
@@ -108,6 +108,48 @@ namespace XML_WS_AgencyApp
             };
 
             ctx.BonusFeatures.Add(ac);
+
+            AccomodationCategory noCat = new AccomodationCategory
+            {
+                Name = "uncategorized"
+            };
+
+            ctx.AccomodationCategories.Add(noCat);
+
+            AccomodationCategory oneStar = new AccomodationCategory
+            {
+                Name = "1 star"
+            };
+
+            ctx.AccomodationCategories.Add(oneStar);
+
+            AccomodationCategory twoStars = new AccomodationCategory
+            {
+                Name = "2 stars"
+            };
+
+            ctx.AccomodationCategories.Add(twoStars);
+
+            AccomodationCategory threeStars = new AccomodationCategory
+            {
+                Name = "3 stars"
+            };
+
+            ctx.AccomodationCategories.Add(threeStars);
+
+            AccomodationCategory fourStars = new AccomodationCategory
+            {
+                Name = "4 stars"
+            };
+
+            ctx.AccomodationCategories.Add(fourStars);
+
+            AccomodationCategory fiveStars = new AccomodationCategory
+            {
+                Name = "5 stars"
+            };
+
+            ctx.AccomodationCategories.Add(fiveStars);
 
             ctx.SaveChanges();
         }

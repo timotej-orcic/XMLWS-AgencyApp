@@ -1,0 +1,29 @@
+﻿@model XML_WS_AgencyApp.Models.DisplayBookingUnitsViewModel
+@{
+    ViewBag.Title = "My booking units";
+}
+
+<h2 style="color:#757575">My booking units:</h2>
+
+<div style="position:relative">
+    @if (Model.MyBookingUnits.Count > 0)
+    {
+        for (int i = 0; i < Model.MyBookingUnits.Count; i++)
+        {
+            <div class="jumbotron" style="background-color:rgba(211,211,211,0.2);  width: 600px; margin:0 auto ">
+                <div>
+                    <h2 style="color:#444444">@Model.MyBookingUnits[i].Name</h2>
+                </div>
+                <h3 style="font-weight:bold;color:#444444;font-size: 14px">Address: @Model.MyBookingUnits[i].Address</h3>
+
+                <img src=@Url.Content(Model.MyBookingUnits[i].ImgUrl) height="64" width="64" />
+
+                @Html.HiddenFor(m => m.MyBookingUnits[i].Id)
+
+                <input type="button" class="btn btn-success" value="Edit" onclick="location.href='@Url.Action("EditBookingUnit", "Agent", new { bookingUnitId = Model.MyBookingUnits[i].Id })'" />
+                <input type="button" class="btn btn-warning" value="Manage monthly terms" onclick="location.href='@Url.Action("ManageMonthlyPrices", "Agent", new { bookingUnitId = Model.MyBookingUnits[i].Id })'" />
+            </div>
+            <br />
+        }
+    }
+</div>

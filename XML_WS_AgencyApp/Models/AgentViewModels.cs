@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
@@ -37,6 +35,10 @@ namespace XML_WS_AgencyApp.Models
         public string AccomodationTypeId { get; set; }
         public IEnumerable<SelectListItem> AccomodationTypesList { get; set; }
 
+        [Required(ErrorMessage = "The accomodation category is required")]
+        public string AccomodationCategoryId { get; set; }
+        public IEnumerable<SelectListItem> AccomodationCategoriesList { get; set; }
+
         [Required(ErrorMessage = "At least one image is required")]
         [DataType(DataType.Upload)]
         public HttpPostedFileBase[] Images { get; set; }
@@ -51,5 +53,91 @@ namespace XML_WS_AgencyApp.Models
         public string Name { get; set; }
 
         public bool IsSelected { get; set; }
+    }
+
+    public class DisplayBookingUnitsViewModel
+    {
+        public List<BookingUnitViewModel> MyBookingUnits { get; set; }
+    }
+
+    public class BookingUnitViewModel
+    {
+        public long Id { get; set; }
+
+        public string Name { get; set; }
+
+        public string Address { get; set; }
+
+        public string ImgUrl { get; set; }
+    }
+
+    public class MonthlyPricesViewModel
+    {
+        public long BookingUnitId { get; set; }
+
+        [Required(ErrorMessage = "The year is required")]
+        [Range(typeof(int), "2000", "2147483647", ErrorMessage = "The minimum year is 2000")]
+        [RegularExpression(@"^([1-9]\d*|0)$", ErrorMessage = "Must be an integer")]
+        public int Year { get; set; }
+
+        [Required(ErrorMessage = "The January price is required")]
+        [Range(typeof(decimal), "1", "79228162514264337593543950335", ErrorMessage = "The minimum unit price must be greater then 0")]
+        [RegularExpression(@"^[1-9]\d*(\.\d+)?$", ErrorMessage = "Must be a decimal number greater then 0")]
+        public decimal JanuaryPrice { get; set; }
+
+        [Required(ErrorMessage = "The February price is required")]
+        [Range(typeof(decimal), "1", "79228162514264337593543950335", ErrorMessage = "The minimum unit price must be greater then 0")]
+        [RegularExpression(@"^[1-9]\d*(\.\d+)?$", ErrorMessage = "Must be a decimal number greater then 0")]
+        public decimal FebruaryPrice { get; set; }
+
+        [Required(ErrorMessage = "The March price is required")]
+        [Range(typeof(decimal), "1", "79228162514264337593543950335", ErrorMessage = "The minimum unit price must be greater then 0")]
+        [RegularExpression(@"^[1-9]\d*(\.\d+)?$", ErrorMessage = "Must be a decimal number greater then 0")]
+        public decimal MarchPrice { get; set; }
+
+        [Required(ErrorMessage = "The April price is required")]
+        [Range(typeof(decimal), "1", "79228162514264337593543950335", ErrorMessage = "The minimum unit price must be greater then 0")]
+        [RegularExpression(@"^[1-9]\d*(\.\d+)?$", ErrorMessage = "Must be a decimal number greater then 0")]
+        public decimal AprilPrice { get; set; }
+
+        [Required(ErrorMessage = "The May price is required")]
+        [Range(typeof(decimal), "1", "79228162514264337593543950335", ErrorMessage = "The minimum unit price must be greater then 0")]
+        [RegularExpression(@"^[1-9]\d*(\.\d+)?$", ErrorMessage = "Must be a decimal number greater then 0")]
+        public decimal MayPrice { get; set; }
+
+        [Required(ErrorMessage = "The June price is required")]
+        [Range(typeof(decimal), "1", "79228162514264337593543950335", ErrorMessage = "The minimum unit price must be greater then 0")]
+        [RegularExpression(@"^[1-9]\d*(\.\d+)?$", ErrorMessage = "Must be a decimal number greater then 0")]
+        public decimal JunePrice { get; set; }
+
+        [Required(ErrorMessage = "The July price is required")]
+        [Range(typeof(decimal), "1", "79228162514264337593543950335", ErrorMessage = "The minimum unit price must be greater then 0")]
+        [RegularExpression(@"^[1-9]\d*(\.\d+)?$", ErrorMessage = "Must be a decimal number greater then 0")]
+        public decimal JulyPrice { get; set; }
+
+        [Required(ErrorMessage = "The August price is required")]
+        [Range(typeof(decimal), "1", "79228162514264337593543950335", ErrorMessage = "The minimum unit price must be greater then 0")]
+        [RegularExpression(@"^[1-9]\d*(\.\d+)?$", ErrorMessage = "Must be a decimal number greater then 0")]
+        public decimal AugustPrice { get; set; }
+
+        [Required(ErrorMessage = "The September price is required")]
+        [Range(typeof(decimal), "1", "79228162514264337593543950335", ErrorMessage = "The minimum unit price must be greater then 0")]
+        [RegularExpression(@"^[1-9]\d*(\.\d+)?$", ErrorMessage = "Must be a decimal number greater then 0")]
+        public decimal SeptemberPrice { get; set; }
+
+        [Required(ErrorMessage = "The October price is required")]
+        [Range(typeof(decimal), "1", "79228162514264337593543950335", ErrorMessage = "The minimum unit price must be greater then 0")]
+        [RegularExpression(@"^[1-9]\d*(\.\d+)?$", ErrorMessage = "Must be a decimal number greater then 0")]
+        public decimal OctoberPrice { get; set; }
+
+        [Required(ErrorMessage = "The November price is required")]
+        [Range(typeof(decimal), "1", "79228162514264337593543950335", ErrorMessage = "The minimum unit price must be greater then 0")]
+        [RegularExpression(@"^[1-9]\d*(\.\d+)?$", ErrorMessage = "Must be a decimal number greater then 0")]
+        public decimal NovemberPrice { get; set; }
+
+        [Required(ErrorMessage = "The December price is required")]
+        [Range(typeof(decimal), "1", "79228162514264337593543950335", ErrorMessage = "The minimum unit price must be greater then 0")]
+        [RegularExpression(@"^[1-9]\d*(\.\d+)?$", ErrorMessage = "Must be a decimal number greater then 0")]
+        public decimal DecemberPrice { get; set; }
     }
 }

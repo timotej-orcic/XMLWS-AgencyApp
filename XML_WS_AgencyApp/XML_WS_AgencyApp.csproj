@@ -201,9 +201,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\AccomodationCategoriesRepository.cs" />
     <Compile Include="Helpers\AccomodationTypesRepository.cs" />
     <Compile Include="Helpers\BonusFeaturesRepository.cs" />
     <Compile Include="Helpers\BookingUnitRepository.cs" />
+    <Compile Include="Helpers\BookingUnitsDisplayRepo.cs" />
     <Compile Include="Helpers\CitiesRepository.cs" />
     <Compile Include="Helpers\CountriesRepository.cs" />
     <Compile Include="Initializer.cs" />
@@ -268,6 +270,8 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Agent\AgentPage.cshtml" />
     <Content Include="Views\Agent\AddNewBookingUnit.cshtml" />
+    <Content Include="Views\Agent\MyBookingUnits.cshtml" />
+    <Content Include="Views\Agent\ManageMonthlyPrices.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

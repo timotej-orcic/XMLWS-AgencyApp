@@ -1,0 +1,171 @@
+﻿@model XML_WS_AgencyApp.Models.MonthlyPricesViewModel
+@{
+    ViewBag.Title = "Manage monthly prices";
+}
+
+<h2 style="color:#757575">Manage monthly prices for the given year:</h2>
+@using (Html.BeginForm("AddMonthlyPrices", "Agent", FormMethod.Post, new { @class = "form-horizontal", role = "form"}))
+{
+    @Html.AntiForgeryToken()
+    <hr />
+    <form class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(m => m.BookingUnitId)
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <label class="control-label col-xs-3" style="color:#444444">Year</label>
+                    <div class="col-xs-9">
+                        @Html.TextBoxFor(m => m.Year, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Year, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <label class="control-label col-xs-3" style="color:#444444">January price</label>
+                    <div class="col-xs-9">
+                        @Html.TextBoxFor(m => m.JanuaryPrice, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.JanuaryPrice, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <label class="control-label col-xs-3" style="color:#444444">February price</label>
+                    <div class="col-xs-9">
+                        @Html.TextBoxFor(m => m.FebruaryPrice, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.FebruaryPrice, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <label class="control-label col-xs-3" style="color:#444444">March price</label>
+                    <div class="col-xs-9">
+                        @Html.TextBoxFor(m => m.MarchPrice, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.MarchPrice, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <label class="control-label col-xs-3" style="color:#444444">April price</label>
+                    <div class="col-xs-9">
+                        @Html.TextBoxFor(m => m.AprilPrice, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.AprilPrice, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <label class="control-label col-xs-3" style="color:#444444">May price</label>
+                    <div class="col-xs-9">
+                        @Html.TextBoxFor(m => m.MayPrice, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.MayPrice, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <label class="control-label col-xs-3" style="color:#444444">June price</label>
+                    <div class="col-xs-9">
+                        @Html.TextBoxFor(m => m.JunePrice, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.JunePrice, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <label class="control-label col-xs-3" style="color:#444444">July price</label>
+                    <div class="col-xs-9">
+                        @Html.TextBoxFor(m => m.JulyPrice, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.JulyPrice, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <label class="control-label col-xs-3" style="color:#444444">August price</label>
+                    <div class="col-xs-9">
+                        @Html.TextBoxFor(m => m.AugustPrice, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.AugustPrice, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <label class="control-label col-xs-3" style="color:#444444">September price</label>
+                    <div class="col-xs-9">
+                        @Html.TextBoxFor(m => m.SeptemberPrice, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.SeptemberPrice, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <label class="control-label col-xs-3" style="color:#444444">October price</label>
+                    <div class="col-xs-9">
+                        @Html.TextBoxFor(m => m.OctoberPrice, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.OctoberPrice, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <label class="control-label col-xs-3" style="color:#444444">November price</label>
+                    <div class="col-xs-9">
+                        @Html.TextBoxFor(m => m.NovemberPrice, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.NovemberPrice, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <label class="control-label col-xs-3" style="color:#444444">December price</label>
+                    <div class="col-xs-9">
+                        @Html.TextBoxFor(m => m.DecemberPrice, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.DecemberPrice, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="col-xs-9"></div>
+                <div class="col-xs-3">
+                    <button type="submit" class="btn btn-default">Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

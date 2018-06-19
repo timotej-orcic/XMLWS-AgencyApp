@@ -9,6 +9,7 @@ namespace XML_WS_AgencyApp.Helpers
             var countriesRepo = new CountriesRepository();
             var citiesRepo = new CitiesRepository();
             var accTypesRepo = new AccomodationTypesRepository();
+            var accCategoriesRepo = new AccomodationCategoriesRepository();
             var bonusFeaturesRepo = new BonusFeaturesRepository();
 
             var bookingUnit = new AddNewBookingUnitViewModel()
@@ -16,9 +17,20 @@ namespace XML_WS_AgencyApp.Helpers
                 CountriesList = countriesRepo.GetCountries(),
                 CitiesList = citiesRepo.GetCities(),
                 AccomodationTypesList = accTypesRepo.GetAccomodationTypes(),
-                BonusFeatures = bonusFeaturesRepo.GetBonusFeatures()
+                BonusFeatures = bonusFeaturesRepo.GetBonusFeatures(),
+                AccomodationCategoriesList = accCategoriesRepo.GetAccomodationCategories()
             };
             return bookingUnit;
+        }
+
+        public DisplayBookingUnitsViewModel GetMyBookingUnitsDisplayViewModel()
+        {
+            var bookingUnitsDisplayRepo = new BookingUnitsDisplayRepo();
+            var bookingUnits = new DisplayBookingUnitsViewModel()
+            {
+                MyBookingUnits = bookingUnitsDisplayRepo.GetBookingUnits()
+            };
+            return bookingUnits;
         }
     }
 }

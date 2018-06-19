@@ -26,7 +26,7 @@ namespace XML_WS_AgencyApp.Helpers
             {
                 using (var ctx = new ApplicationDbContext())
                 {
-                    IEnumerable<SelectListItem> cities = ctx.Cities.AsNoTracking()
+                    List<SelectListItem> cities = ctx.Cities.AsNoTracking()
                         .OrderBy(x => x.Name)
                         .Where(x => x.Country.Id.ToString() == countryId)
                         .Select(x =>

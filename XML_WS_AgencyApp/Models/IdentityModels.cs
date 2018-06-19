@@ -67,9 +67,11 @@ namespace XML_WS_AgencyApp.Models
         public DbSet<Country> Countries { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<AccomodationType> AccomodationTypes { get; set; }
+        public DbSet<AccomodationCategory> AccomodationCategories { get; set; }
         public DbSet<BookingUnit> BookingUnits { get; set; }
         public DbSet<BonusFeatures> BonusFeatures { get; set; }
         public DbSet<BookingUnitPicture> Pictures { get; set; }
+        public DbSet<MonthlyPrices> MonthlyPrices { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder mb)
         {
