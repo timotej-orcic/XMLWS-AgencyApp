@@ -5,6 +5,8 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Web;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace XML_WS_AgencyApp.Models
 {
@@ -74,6 +76,8 @@ namespace XML_WS_AgencyApp.Models
         public DbSet<MonthlyPrices> MonthlyPrices { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<ResponseMessage> ResponseMessages { get; set; }
+        public DbSet<RegisteredUserInfo> RegisteredUsersInfo { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder mb)
         {
@@ -83,7 +87,7 @@ namespace XML_WS_AgencyApp.Models
             base.OnModelCreating(mb);
         }
 
-        public async void addInitialUsers()
+        public async void AddInitialUsers()
         {
             using (var um = new UserManager<ApplicationUser, long>(new CustomUserStore(new ApplicationDbContext())))
             {

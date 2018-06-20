@@ -103,6 +103,28 @@ namespace XML_WS_AgencyApp.Controllers
                 return RedirectToAction("Login", "Account");
             else
             {
+                MessagesDisplayRepo msgdRepo = new MessagesDisplayRepo();
+                long currentUserId = User.Identity.GetUserId<long>();
+
+                //mocking the initial messages
+                msgdRepo.AddInitialMessages(currentUserId);
+
+                var model = new ClientMessagingViewModel();
+                model.ReceivedMessages = msgdRepo.GetMessages(currentUserId);
+                return View(model);
+            }
+        }
+
+        // GET: OpenMessage
+        public ActionResult OpenMessage(long messageId)
+        {
+            if (!Request.IsAuthenticated)
+                return RedirectToAction("Login", "Account");
+            else
+            {
+                MessagesDisplayRepo msgdRepo = new MessagesDisplayRepo();
+                long currentUserId = User.Identity.GetUserId<long>();
+                OpenedMessageViewModel model = msgdRepo.GetOpennedMessage(messageId);
                 return View(model);
             }
         }
@@ -364,6 +386,51 @@ namespace XML_WS_AgencyApp.Controllers
                 {
                     //invalid VM exception
                     return RedirectToAction("LocalReservation", "Agent", new { bookingUnitId = lrVM.BookingUnitId });
+                }
+            }
+        }
+
+        public async Task<ActionResult> SendMessageResponse(OpenedMessageViewModel omVM)
+        {
+            if (!Request.IsAuthenticated)
+                return RedirectToAction("Login", "Account");
+            else
+            {
+                if(ModelState.IsValid)
+                {
+                    //send a request on the main server and await for the response
+                    bool serverResp = true;
+
+                    if (serverResp)
+                    {
+                        //save localy
+                        using (var ctx = new ApplicationDbContext())
+                        {
+                            ResponseMessage respMsg = new ResponseMessage
+                            {
+                                Content = omVM.ResponseContent                                
+                            };
+                            ctx.ResponseMessages.Add(respMsg);
+
+                            Message msg = ctx.Messages.FirstOrDefault(x => x.Id == omVM.Id);
+                            msg.HasResponse = true;
+                            msg.ResponseMessage = respMsg;
+
+                            ctx.SaveChanges();
+                        }
+                    }
+                    else
+                    {
+                        //some error happened, retry
+
+                    }
+
+                    return RedirectToAction("OpenMessage", "Agent", new { messageId = omVM.Id });
+                }
+                else
+                {
+                    //invalid VM exception
+                    return RedirectToAction("OpenMessage", "Agent", new { messageId = omVM.Id });
                 }
             }
         }

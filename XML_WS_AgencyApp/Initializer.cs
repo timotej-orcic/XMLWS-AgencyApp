@@ -1,4 +1,7 @@
-﻿using XML_WS_AgencyApp.Models;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using System.Web;
+using XML_WS_AgencyApp.Models;
 
 namespace XML_WS_AgencyApp
 {
@@ -156,6 +159,14 @@ namespace XML_WS_AgencyApp
             };
 
             ctx.AccomodationCategories.Add(fiveStars);
+
+            RegisteredUserInfo regUsr = new RegisteredUserInfo
+            {
+                UserName = "Rikeeeh",
+                MainServerId = null
+            };
+
+            ctx.RegisteredUsersInfo.Add(regUsr);
 
             ctx.SaveChanges();
         }

@@ -1,0 +1,65 @@
+﻿@model XML_WS_AgencyApp.Models.OpenedMessageViewModel
+@{
+    ViewBag.Title = "Opened message";
+}
+
+@if (Model.HasResponse)
+{
+    <br />
+    <div class="jumbotron" style="background-color:rgba(211,211,211,0.2);  width: 600px; margin:0 auto ">
+        <div>
+            <h2 style="color:#151515"><b>@Model.SenderUserName:</b></h2>
+        </div>
+
+        <label style="color:#444444">@Model.Content</label>
+    </div>
+    <br />
+    <div class="jumbotron" style="background-color:rgba(66,165,245,0.4);  width: 600px; margin:0 auto ">
+        <div>
+            <h2 style="color:#151515"><b>Me:</b></h2>
+        </div>
+
+        <label style="color:white">@Model.ResponseContent</label>
+    </div>
+}
+else
+{
+    <br />
+    <div class="jumbotron" style="background-color:rgba(100,255,218,0.4);  width: 600px; margin:0 auto ">
+        <div>
+            <h2 style="color:#151515"><b>@Model.SenderUserName:</b></h2>
+        </div>
+
+        <label style="color:#444444">@Model.Content</label>
+    </div>
+    <br />
+    <div class="jumbotron" style="background-color:rgba(211,211,211,0.2);  width: 600px; margin:0 auto ">
+        @using (Html.BeginForm("SendMessageResponse", "Agent", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            <form class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(m => m.Id)
+                <div class="row">
+                    <div class="form-group">
+                        <label class="control-label col-lg-3" style="color:#444444">Response</label>
+                        <div class="col-lg-9">
+                            @Html.TextAreaFor(m => m.ResponseContent, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.ResponseContent, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8"></div>
+                    <div class="col-lg-4" style="float:right">
+                        <button type="submit" class="btn btn-default">Send</button>
+                    </div>
+                </div>
+            </form>
+        }
+    </div>
+}
+<br />
+<div class="row">
+    @Html.ActionLink("Back to Client Messaging", "ClientMessaging", "Agent", routeValues: null, htmlAttributes: new { @class = "btn btn-primary", @style = "float:right" })
+</div>

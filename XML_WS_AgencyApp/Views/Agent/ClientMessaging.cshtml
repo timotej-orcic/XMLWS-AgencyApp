@@ -1,3 +1,41 @@
-﻿@{
+﻿@model XML_WS_AgencyApp.Models.ClientMessagingViewModel
+@{
     ViewBag.Title = "Client Messaging";
 }
+
+<h2 style="color:#757575">My messages:</h2>
+
+<div style="position:relative">
+    @if (Model.ReceivedMessages.Count > 0)
+    {
+        for (int i = 0; i < Model.ReceivedMessages.Count; i++)
+        {
+            if (!Model.ReceivedMessages[i].IsRead)
+            {
+                <div class="jumbotron" style="background-color:rgba(80,80,80,0.5);  width: 600px; margin:0 auto ">
+                    <div>
+                        <h2 style="color:#151515"><span style="color:#444444">Received from: </span><b>@Model.ReceivedMessages[i].SenderUserName</b></h2>
+                    </div>
+                    @Html.HiddenFor(m => m.ReceivedMessages[i].Id)
+
+                    <input type="button" class="btn btn-success" value="Open" onclick="location.href='@Url.Action("OpenMessage", "Agent", new { messageId = Model.ReceivedMessages[i].Id })'" />
+                </div>
+                <br />
+            }
+            else
+            {
+                <div class="jumbotron" style="background-color:rgba(211,211,211,0.2);  width: 600px; margin:0 auto ">
+                    <div>
+                        <h2 style="color:#151515"><span style="color:#444444">Received from: </span><b>@Model.ReceivedMessages[i].SenderUserName</b></h2>
+                    </div>
+
+                    @Html.HiddenFor(m => m.ReceivedMessages[i].Id)
+
+                    <input type="button" class="btn btn-default" value="View" onclick="location.href='@Url.Action("OpenMessage", "Agent", new { messageId = Model.ReceivedMessages[i].Id })'" />
+                </div>
+                <br />
+            }
+
+        }
+    }
+</div>

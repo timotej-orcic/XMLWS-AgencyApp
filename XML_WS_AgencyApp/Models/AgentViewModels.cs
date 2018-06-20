@@ -172,6 +172,25 @@ namespace XML_WS_AgencyApp.Models
 
     public class MessageViewModel
     {
+        public long Id { get; set; }
 
+        public string SenderUserName { get; set; }
+
+        public bool IsRead { get; set; }
+    }
+
+    public class OpenedMessageViewModel
+    {
+        public long Id { get; set; }
+
+        public string SenderUserName { get; set; }
+
+        public string Content { get; set; }
+
+        [Required(ErrorMessage = "Response content is requred")]
+        [MaxLength(1000, ErrorMessage = "Maximum length is 1000 characters")]
+        public string ResponseContent { get; set; }
+
+        public bool HasResponse { get; set; }
     }
 }
