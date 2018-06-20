@@ -111,42 +111,48 @@ namespace XML_WS_AgencyApp
 
             AccomodationCategory noCat = new AccomodationCategory
             {
-                Name = "uncategorized"
+                Name = "uncategorized",
+                MainServerId = null
             };
 
             ctx.AccomodationCategories.Add(noCat);
 
             AccomodationCategory oneStar = new AccomodationCategory
             {
-                Name = "1 star"
+                Name = "1 star",
+                MainServerId = null
             };
 
             ctx.AccomodationCategories.Add(oneStar);
 
             AccomodationCategory twoStars = new AccomodationCategory
             {
-                Name = "2 stars"
+                Name = "2 stars",
+                MainServerId = null
             };
 
             ctx.AccomodationCategories.Add(twoStars);
 
             AccomodationCategory threeStars = new AccomodationCategory
             {
-                Name = "3 stars"
+                Name = "3 stars",
+                MainServerId = null
             };
 
             ctx.AccomodationCategories.Add(threeStars);
 
             AccomodationCategory fourStars = new AccomodationCategory
             {
-                Name = "4 stars"
+                Name = "4 stars",
+                MainServerId = null
             };
 
             ctx.AccomodationCategories.Add(fourStars);
 
             AccomodationCategory fiveStars = new AccomodationCategory
             {
-                Name = "5 stars"
+                Name = "5 stars",
+                MainServerId = null
             };
 
             ctx.AccomodationCategories.Add(fiveStars);

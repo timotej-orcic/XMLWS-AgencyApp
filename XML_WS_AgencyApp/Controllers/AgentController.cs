@@ -79,6 +79,34 @@ namespace XML_WS_AgencyApp.Controllers
             }
         }
 
+        // GET: LocalReservation
+        public ActionResult LocalReservation(long bookingUnitId)
+        {
+            if (!Request.IsAuthenticated)
+                return RedirectToAction("Login", "Account");
+            else
+            {
+                BookingUnitsDisplayRepo budRepo = new BookingUnitsDisplayRepo();
+                var model = new LocalReservationViewModel();
+                model.BookingUnitId = bookingUnitId;
+                model.BookingUnitName = budRepo.GetBookingUnitNameById(bookingUnitId);
+                model.DateFrom = DateTime.Now;
+                model.DateTo = DateTime.Now;
+                return View(model);
+            }
+        }
+
+        // GET: ClientMessaging
+        public ActionResult ClientMessaging()
+        {
+            if (!Request.IsAuthenticated)
+                return RedirectToAction("Login", "Account");
+            else
+            {
+                return View(model);
+            }
+        }
+
         public async Task<ActionResult> AddBookingUnit(AddNewBookingUnitViewModel anbuVM)
         {
             if (!Request.IsAuthenticated)
@@ -164,6 +192,7 @@ namespace XML_WS_AgencyApp.Controllers
                 }
                 else
                 {
+                    //invalid VM exception
                     return RedirectToAction("AddNewBookingUnit", "Agent");
                 }
             }
@@ -198,7 +227,7 @@ namespace XML_WS_AgencyApp.Controllers
                                 BookingUnit myUnit = ctx.BookingUnits.FirstOrDefault(x => x.Id == mpVM.BookingUnitId);
 
                                 //help structure for monthly prices
-                                decimal[] myMonths = new decimal[12];
+                                double[] myMonths = new double[12];
                                 myMonths[0] = mpVM.JanuaryPrice;
                                 myMonths[1] = mpVM.FebruaryPrice;
                                 myMonths[2] = mpVM.MarchPrice;
@@ -270,7 +299,71 @@ namespace XML_WS_AgencyApp.Controllers
                 }
                 else
                 {
+                    //invalid VM exception
                     return RedirectToAction("ManageMonhtlyPrices", "Agent", new { bookingUnitId = mpVM.BookingUnitId});
+                }
+            }
+        }
+
+        public async Task<ActionResult> AddLocalReservation(LocalReservationViewModel lrVM)
+        {
+            if (!Request.IsAuthenticated)
+                return RedirectToAction("Login", "Account");
+            else
+            {
+                if (ModelState.IsValid)
+                {
+                    int totalDays = (lrVM.DateTo - lrVM.DateFrom).Days;
+                    if(totalDays <= 30)
+                    {
+                        //send a request on the main server and await for the response
+                        bool serverResp = true;
+
+                        if (serverResp)
+                        {
+                            //save localy
+                            using (var ctx = new ApplicationDbContext())
+                            {
+                                BookingUnit myUnit = ctx.BookingUnits.FirstOrDefault(x => x.Id == lrVM.BookingUnitId);
+                                TotalPriceCalculator totPrCalc = new TotalPriceCalculator();
+                                double totalPrice = totPrCalc.CalculateTotalPrice(lrVM.BookingUnitId, lrVM.DateFrom, lrVM.DateTo);
+
+                                Reservation localReservation = new Reservation
+                                {
+                                    Confirmed = false,
+                                    SubjectName = lrVM.ReserveeFirstName,
+                                    SubjectSurname = lrVM.ReserveeLastName,
+                                    From = lrVM.DateFrom,
+                                    To = lrVM.DateTo,
+                                    BookingUnit = myUnit,
+                                    TotalPrice = totalPrice
+                                };
+
+                                //add the new item
+                                ctx.Reservations.Add(localReservation);
+
+                                //save changes
+                                ctx.SaveChanges();
+                            }
+                        }
+                        else
+                        {
+                            //some error happened, retry
+
+                        }
+
+                        return RedirectToAction("AgentPage", "Agent");
+                    }
+                    else
+                    {
+                        //max days limit exception
+                        return RedirectToAction("LocalReservation", "Agent", new { bookingUnitId = lrVM.BookingUnitId });
+                    }
+                }
+                else
+                {
+                    //invalid VM exception
+                    return RedirectToAction("LocalReservation", "Agent", new { bookingUnitId = lrVM.BookingUnitId });
                 }
             }
         }

@@ -21,7 +21,9 @@
                 @Html.HiddenFor(m => m.MyBookingUnits[i].Id)
 
                 <input type="button" class="btn btn-success" value="Edit" onclick="location.href='@Url.Action("EditBookingUnit", "Agent", new { bookingUnitId = Model.MyBookingUnits[i].Id })'" />
-                <input type="button" class="btn btn-warning" value="Manage monthly terms" onclick="location.href='@Url.Action("ManageMonthlyPrices", "Agent", new { bookingUnitId = Model.MyBookingUnits[i].Id })'" />
+                <input type="button" class="btn btn-warning" value="Manage prices" onclick="location.href='@Url.Action("ManageMonthlyPrices", "Agent", new { bookingUnitId = Model.MyBookingUnits[i].Id })'" />
+                <input type="button" class="btn btn-info" value="Local reservation" onclick="location.href='@Url.Action("LocalReservation", "Agent", new { bookingUnitId = Model.MyBookingUnits[i].Id })'" />
+                <input type="button" class="btn btn-danger" value="Delete" onclick="location.href='@Url.Action("DeleteBookingUnit", "Agent", new { bookingUnitId = Model.MyBookingUnits[i].Id })'" />
             </div>
             <br />
         }

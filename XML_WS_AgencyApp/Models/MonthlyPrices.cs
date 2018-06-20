@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace XML_WS_AgencyApp.Models
@@ -10,8 +11,8 @@ namespace XML_WS_AgencyApp.Models
         public long Id { get; set; }
 
         [Required]
-        [Range(typeof(decimal), "0", "79228162514264337593543950335")]
-        public decimal Amount { get; set; }
+        [Range(typeof(double), "1", "1000000000")]
+        public double Amount { get; set; }
 
         [Required]
         [Range(typeof(int), "1", "12")]

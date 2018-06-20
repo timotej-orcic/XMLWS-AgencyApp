@@ -1,0 +1,82 @@
+﻿@model XML_WS_AgencyApp.Models.LocalReservationViewModel
+@{
+    ViewBag.Title = "Local reservation";
+}
+
+@Styles.Render("~/Content/jquery-ui/css")
+
+<h2 style="color:#757575">Make a local reservation of the unit: <b style="color:black">@Model.BookingUnitName</b></h2>
+
+@using (Html.BeginForm("AddLocalReservation", "Agent", FormMethod.Post, new { @class = "form-horizontal", role = "form"}))
+{
+    @Html.AntiForgeryToken()
+    <hr />
+    <form class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(m => m.BookingUnitId)
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <label class="control-label col-xs-3" style="color:#444444">Reservee first name</label>
+                    <div class="col-xs-9">
+                        @Html.TextBoxFor(m => m.ReserveeFirstName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.ReserveeFirstName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <label class="control-label col-xs-3" style="color:#444444">Reservee last name</label>
+                    <div class="col-xs-9">
+                        @Html.TextBoxFor(m => m.ReserveeLastName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.ReserveeLastName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <label class="control-label col-xs-3" style="color:#444444">Date from</label>
+                    <div class="col-xs-9">
+                        @Html.TextBoxFor(m => m.DateFrom, new { @class = "date-picker" })
+                        @Html.ValidationMessageFor(m => m.DateFrom, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <label class="control-label col-xs-3" style="color:#444444">Date to</label>
+                    <div class="col-xs-9">
+                        @Html.TextBoxFor(m => m.DateTo, new { @class = "date-picker" })
+                        @Html.ValidationMessageFor(m => m.DateTo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="col-xs-9"></div>
+                <div class="col-xs-3">
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </div>
+            </div>
+        </div>
+    </form>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery-ui")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/mvcfoolproof")
+    <script type="text/javascript">
+        $(function () {
+            // This will make every element with the class "date-picker" into a DatePicker element
+            $('.date-picker').datepicker();
+        })
+    </script>
+}

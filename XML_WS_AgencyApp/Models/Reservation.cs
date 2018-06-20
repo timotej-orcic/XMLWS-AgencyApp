@@ -22,11 +22,9 @@ namespace XML_WS_AgencyApp.Models
         [Required]
         public bool Confirmed { get; set; }
 
-        [Required]
         [MaxLength(60)]
         public string SubjectName { get; set; }
 
-        [Required]
         [MaxLength(60)]
         public string SubjectSurname { get; set; }
 

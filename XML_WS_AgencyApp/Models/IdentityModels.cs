@@ -72,13 +72,13 @@ namespace XML_WS_AgencyApp.Models
         public DbSet<BonusFeatures> BonusFeatures { get; set; }
         public DbSet<BookingUnitPicture> Pictures { get; set; }
         public DbSet<MonthlyPrices> MonthlyPrices { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder mb)
         {
             mb.Entity<ApplicationUser>().Property(x => x.Email).HasMaxLength(90);
             mb.Entity<ApplicationUser>().Property(x => x.UserName).HasMaxLength(60);
-
-
 
             base.OnModelCreating(mb);
         }

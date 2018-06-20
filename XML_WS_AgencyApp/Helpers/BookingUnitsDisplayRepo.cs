@@ -34,5 +34,13 @@ namespace XML_WS_AgencyApp.Helpers
                 return retList;
             }
         }
+
+        public string GetBookingUnitNameById(long buId)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                return ctx.BookingUnits.FirstOrDefault(x => x.Id == buId).Name;
+            }
+        }
     }
 }
