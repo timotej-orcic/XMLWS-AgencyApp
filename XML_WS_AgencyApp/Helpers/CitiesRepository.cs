@@ -9,7 +9,7 @@ namespace XML_WS_AgencyApp.Helpers
     {
         public IEnumerable<SelectListItem> GetCities()
         {
-            List<SelectListItem> regions = new List<SelectListItem>()
+            List<SelectListItem> cities = new List<SelectListItem>()
             {
                 new SelectListItem
                 {
@@ -17,7 +17,7 @@ namespace XML_WS_AgencyApp.Helpers
                     Text = " "
                 }
             };
-            return regions;
+            return cities;
         }
 
         public IEnumerable<SelectListItem> GetCities(string countryId)

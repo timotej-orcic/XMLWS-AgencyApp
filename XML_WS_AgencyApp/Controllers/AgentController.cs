@@ -61,7 +61,8 @@ namespace XML_WS_AgencyApp.Controllers
             else
             {
                 var repo = new BookingUnitRepository();
-                var model = repo.GetMyBookingUnitsDisplayViewModel();
+                long currentUserId = User.Identity.GetUserId<long>();
+                var model = repo.GetMyBookingUnitsDisplayViewModel(currentUserId);
                 return View(model);
             }
         }
@@ -125,6 +126,21 @@ namespace XML_WS_AgencyApp.Controllers
                 MessagesDisplayRepo msgdRepo = new MessagesDisplayRepo();
                 long currentUserId = User.Identity.GetUserId<long>();
                 OpenedMessageViewModel model = msgdRepo.GetOpennedMessage(messageId);
+                return View(model);
+            }
+        }
+
+        // GET: MyReservations
+        public ActionResult MyReservations()
+        {
+            if (!Request.IsAuthenticated)
+                return RedirectToAction("Login", "Account");
+            else
+            {
+                ReservationsRepository resRepo = new ReservationsRepository();
+                DisplayReservationsViewModel model = new DisplayReservationsViewModel();
+                long currentUserId = User.Identity.GetUserId<long>();
+                model.MyReservations = resRepo.GetReservations(currentUserId);
                 return View(model);
             }
         }
@@ -207,14 +223,17 @@ namespace XML_WS_AgencyApp.Controllers
                     else
                     {
                         //some error happened, retry
-
+                        TempData["error"] = "Main server error";
+                        return RedirectToAction("AddNewBookingUnit", "Agent");
                     }
 
+                    TempData["success"] = "Successfully added a new booking unit";
                     return RedirectToAction("AgentPage", "Agent");
                 }
                 else
                 {
                     //invalid VM exception
+                    TempData["error"] = "Some form atributes are incorrect";
                     return RedirectToAction("AddNewBookingUnit", "Agent");
                 }
             }
@@ -231,6 +250,7 @@ namespace XML_WS_AgencyApp.Controllers
                     //send a request on the main server and await for the response
                     bool serverResp = true;
 
+                    bool isUpdate = false;
                     if(serverResp)
                     {
                         //save localy
@@ -305,6 +325,8 @@ namespace XML_WS_AgencyApp.Controllers
                                     if (m.Month == 12)
                                         m.Amount = mpVM.DecemberPrice;
                                 }
+
+                                isUpdate = true;
                             }
 
                             //save changes
@@ -314,14 +336,19 @@ namespace XML_WS_AgencyApp.Controllers
                     else
                     {
                         //some error happened, retry
-
+                        TempData["error"] = "Main server error";
+                        return RedirectToAction("ManageMonhtlyPrices", "Agent", new { bookingUnitId = mpVM.BookingUnitId });
                     }
 
+                    TempData["success"] = "Successfully ADDED a new monthly prices sheet for the year " + mpVM.Year;
+                    if (isUpdate)
+                        TempData["success"] = "Successfully UPDATED the monthly prices sheet for the year " + mpVM.Year;
                     return RedirectToAction("AgentPage", "Agent");
                 }
                 else
                 {
                     //invalid VM exception
+                    TempData["error"] = "Some form atributes are incorrect";
                     return RedirectToAction("ManageMonhtlyPrices", "Agent", new { bookingUnitId = mpVM.BookingUnitId});
                 }
             }
@@ -336,7 +363,13 @@ namespace XML_WS_AgencyApp.Controllers
                 if (ModelState.IsValid)
                 {
                     int totalDays = (lrVM.DateTo - lrVM.DateFrom).Days;
-                    if(totalDays <= 30)
+                    bool isCorrectDate = true;
+                    var now = DateTime.Now;
+                    var checkDate = new DateTime(now.Year, now.Month, now.Day);
+                    if (checkDate > lrVM.DateFrom)
+                        isCorrectDate = false;
+
+                    if(totalDays <= 30 && isCorrectDate)
                     {
                         //send a request on the main server and await for the response
                         bool serverResp = true;
@@ -371,20 +404,24 @@ namespace XML_WS_AgencyApp.Controllers
                         else
                         {
                             //some error happened, retry
-
+                            TempData["error"] = "Main server error";
+                            return RedirectToAction("LocalReservation", "Agent", new { bookingUnitId = lrVM.BookingUnitId });
                         }
 
+                        TempData["success"] = "Successfully added a local reservation of the unit: " + lrVM.BookingUnitName;
                         return RedirectToAction("AgentPage", "Agent");
                     }
                     else
                     {
-                        //max days limit exception
+                        //max days limit or begin date exception
+                        TempData["error"] = "The begin date must be today's date or greater. The maximum number of days for one reservation is 30";
                         return RedirectToAction("LocalReservation", "Agent", new { bookingUnitId = lrVM.BookingUnitId });
                     }
                 }
                 else
                 {
                     //invalid VM exception
+                    TempData["error"] = "Some form atributes are incorrect";
                     return RedirectToAction("LocalReservation", "Agent", new { bookingUnitId = lrVM.BookingUnitId });
                 }
             }
@@ -422,15 +459,58 @@ namespace XML_WS_AgencyApp.Controllers
                     else
                     {
                         //some error happened, retry
-
+                        TempData["error"] = "Main server error";
+                        return RedirectToAction("OpenMessage", "Agent", new { messageId = omVM.Id });
                     }
 
+                    TempData["success"] = "Successfully sent the response message to: " + omVM.SenderUserName;
                     return RedirectToAction("OpenMessage", "Agent", new { messageId = omVM.Id });
                 }
                 else
                 {
                     //invalid VM exception
+                    TempData["error"] = "Some form atributes are incorrect";
                     return RedirectToAction("OpenMessage", "Agent", new { messageId = omVM.Id });
+                }
+            }
+        }
+
+        public async Task<ActionResult> ConfirmReservation(long reservationID)
+        {
+            if (!Request.IsAuthenticated)
+                return RedirectToAction("Login", "Account");
+            else
+            {
+                if (ModelState.IsValid)
+                {
+                    //send a request on the main server and await for the response
+                    bool serverResp = true;
+
+                    if (serverResp)
+                    {
+                        //save localy
+                        using (var ctx = new ApplicationDbContext())
+                        {
+                            Reservation res = ctx.Reservations.FirstOrDefault(x => x.Id == reservationID);
+                            res.Confirmed = true;
+                            ctx.SaveChanges();
+                        }
+                    }
+                    else
+                    {
+                        //some error happened, retry
+                        TempData["error"] = "Main server error";
+                        return RedirectToAction("MyReservations", "Agent");
+                    }
+
+                    TempData["success"] = "Successfully confirmed the reservation";
+                    return RedirectToAction("MyReservations", "Agent");
+                }
+                else
+                {
+                    //invalid VM exception
+                    TempData["error"] = "Some form atributes are incorrect";
+                    return RedirectToAction("MyReservations", "Agent");
                 }
             }
         }

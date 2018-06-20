@@ -4,6 +4,14 @@
 }
 
 <h2 style="color:#757575">Manage monthly prices for the given year:</h2>
+
+@if (TempData["error"] != null)
+{
+    <div id="errorId" class="row">
+        <h3 style="color:#D32F2F">@TempData["error"]</h3>
+    </div>
+}
+
 @using (Html.BeginForm("AddMonthlyPrices", "Agent", FormMethod.Post, new { @class = "form-horizontal", role = "form"}))
 {
     @Html.AntiForgeryToken()
@@ -167,5 +175,14 @@
 }
 
 @section Scripts {
+    @Scripts.Render("~/bundles/jquery-ui")
     @Scripts.Render("~/bundles/jqueryval")
+    
+    <script type="text/javascript">
+        $(function () {
+            setTimeout(function () {
+                $("#errorId").hide('blind', {}, 500)
+            }, 3000);
+        });
+    </script>
 }

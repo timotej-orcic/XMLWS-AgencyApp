@@ -4,6 +4,14 @@
 }
 
 <h2 style="color:#757575">Add new booking unit:</h2>
+
+@if (TempData["error"] != null)
+{
+    <div id="errorId" class="row">
+        <h3 style="color:#D32F2F">@TempData["error"]</h3>
+    </div>
+}
+
 @using (Html.BeginForm("AddBookingUnit", "Agent", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
@@ -144,29 +152,36 @@
 }
 
 @section Scripts {
+    @Scripts.Render("~/bundles/jquery-ui")
     @Scripts.Render("~/bundles/jqueryval")
     <script type="text/javascript">
-            $('#Country').change(function () {
-                var selectedCountry = $("#Country").val();
-                var citiesSelect = $('#City');
-                citiesSelect.empty();
-                if (selectedCountry != null && selectedCountry != '') {
-                    $.getJSON('@Url.Action("GetCitiesByCountryId")', { countryId: selectedCountry }, function (cities) {
-                        if (cities != null && !jQuery.isEmptyObject(cities))
-                        {
+        $('#Country').change(function () {
+            var selectedCountry = $("#Country").val();
+            var citiesSelect = $('#City');
+            citiesSelect.empty();
+            if (selectedCountry != null && selectedCountry != '') {
+                $.getJSON('@Url.Action("GetCitiesByCountryId")', { countryId: selectedCountry }, function (cities) {
+                    if (cities != null && !jQuery.isEmptyObject(cities))
+                    {
+                        citiesSelect.append($('<option/>', {
+                            value: null,
+                            text: ""
+                        }));
+                        $.each(cities, function (index, city) {
                             citiesSelect.append($('<option/>', {
-                                value: null,
-                                text: ""
+                                value: city.Value,
+                                text: city.Text
                             }));
-                            $.each(cities, function (index, city) {
-                                citiesSelect.append($('<option/>', {
-                                    value: city.Value,
-                                    text: city.Text
-                                }));
-                            });
-                        };
-                    });
-                }
-            });
+                        });
+                    };
+                });
+            }
+        });
+
+        $(function () {
+            setTimeout(function () {
+                $("#errorId").hide('blind', {}, 500)
+            }, 3000);
+        });
     </script>
 }

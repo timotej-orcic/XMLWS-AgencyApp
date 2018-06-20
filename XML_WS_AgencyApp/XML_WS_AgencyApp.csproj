@@ -213,6 +213,7 @@
     <Compile Include="Helpers\CitiesRepository.cs" />
     <Compile Include="Helpers\CountriesRepository.cs" />
     <Compile Include="Helpers\MessagesDisplayRepo.cs" />
+    <Compile Include="Helpers\ReservationsRepository.cs" />
     <Compile Include="Helpers\TotalPriceCalculator.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="Models\AccomodationCategory.cs" />
@@ -333,6 +334,7 @@
     <Content Include="Views\Agent\LocalReservation.cshtml" />
     <Content Include="Views\Agent\ClientMessaging.cshtml" />
     <Content Include="Views\Agent\OpenMessage.cshtml" />
+    <Content Include="Views\Agent\MyReservations.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

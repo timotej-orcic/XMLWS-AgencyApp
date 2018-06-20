@@ -23,12 +23,12 @@ namespace XML_WS_AgencyApp.Helpers
             return bookingUnit;
         }
 
-        public DisplayBookingUnitsViewModel GetMyBookingUnitsDisplayViewModel()
+        public DisplayBookingUnitsViewModel GetMyBookingUnitsDisplayViewModel(long curentUserId)
         {
             var bookingUnitsDisplayRepo = new BookingUnitsDisplayRepo();
             var bookingUnits = new DisplayBookingUnitsViewModel()
             {
-                MyBookingUnits = bookingUnitsDisplayRepo.GetBookingUnits()
+                MyBookingUnits = bookingUnitsDisplayRepo.GetBookingUnits(curentUserId)
             };
             return bookingUnits;
         }

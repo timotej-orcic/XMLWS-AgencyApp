@@ -1,0 +1,76 @@
+﻿@model XML_WS_AgencyApp.Models.DisplayReservationsViewModel
+@{
+    ViewBag.Title = "My reservations";
+}
+
+<h2 style="color:#757575">My reservations:</h2>
+
+@if (TempData["error"] != null)
+{
+    <div id="errorId" class="row">
+        <h3 style="color:#558B2F">@TempData["error"]</h3>
+    </div>
+}
+
+@if (TempData["success"] != null)
+{
+    <div id="successId" class="row">
+        <h3 style="color:#558B2F">@TempData["success"]</h3>
+    </div>
+}
+
+<div style="position:relative">
+    @if (Model.MyReservations.Count > 0)
+    {
+        for (int i = 0; i < Model.MyReservations.Count; i++)
+        {
+            if (!Model.MyReservations[i].IsConfirmed)
+            {
+                <div class="jumbotron" style="background-color:rgba(211,211,211,0.2);  width: 600px; margin:0 auto ">
+                    <div>
+                        <h2 style="color:#151515"><b style="color:#616161; font-weight:700">@Model.MyReservations[i].BookingUnitName</b> reserved by <span style="color:#444444">@Model.MyReservations[i].ReserveeFullName</span></h2>
+                        <img src=@Url.Content(Model.MyReservations[i].ImgUrl) height="128" width="128" />
+                        <h3>From <span style="color:deepskyblue">@Model.MyReservations[i].DateFrom</span> To <span style="color:deepskyblue">@Model.MyReservations[i].DateTo</span></h3>
+                    </div>
+                    
+                    <h2 style="color:#151515">Price: <b style="color:#000000">@Model.MyReservations[i].TotalPrice</b></h2>
+                    @Html.HiddenFor(m => m.MyReservations[i].Id)
+                    @if (Model.MyReservations[i].CanBeConfirmed)
+                    {
+                        <input type="button" class="btn btn-danger" value="Confirm" onclick="location.href='@Url.Action("ConfirmReservation", "Agent", new { reservationId = Model.MyReservations[i].Id })'" />
+                    }
+                </div>
+                <br />
+            }
+            else
+            {
+                <div class="jumbotron" style="background-color:rgba(0,230,118,0.2);  width: 600px; margin:0 auto ">
+                    <div>
+                        <h2 style="color:#151515"><b style="color:#616161; font-weight:700">@Model.MyReservations[i].BookingUnitName</b> reserved by <span style="color:#444444">@Model.MyReservations[i].ReserveeFullName</span></h2>
+                        <img src=@Url.Content(Model.MyReservations[i].ImgUrl) height="128" width="128" />
+                        <h3>From <span style="color:deepskyblue">@Model.MyReservations[i].DateFrom</span> To <span style="color:deepskyblue">@Model.MyReservations[i].DateTo</span></h3>
+                    </div>
+
+                    <h2 style="color:#151515">Price: <b style="color:#000000">@Model.MyReservations[i].TotalPrice</b></h2>
+
+                    <h3 style="color:#1B5E20"><b style="font-weight:900">Confirmed</b></h3>
+                </div>
+                <br />
+            }
+
+        }
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery-ui")
+
+    <script type="text/javascript">
+        $(function () {
+            setTimeout(function () {
+                $("#errorId").hide('blind', {}, 500)
+                $("#successId").hide('blind', {}, 500)
+            }, 3000);
+        });
+    </script>
+}

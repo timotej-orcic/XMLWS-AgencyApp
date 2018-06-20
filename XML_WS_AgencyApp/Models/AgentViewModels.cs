@@ -193,4 +193,30 @@ namespace XML_WS_AgencyApp.Models
 
         public bool HasResponse { get; set; }
     }
+
+    public class DisplayReservationsViewModel
+    {
+        public List<ReservationViewModel> MyReservations { get; set; }
+    }
+
+    public class ReservationViewModel
+    {
+        public long Id { get; set; }
+
+        public string BookingUnitName { get; set; }
+
+        public string DateFrom { get; set; }
+
+        public string DateTo { get; set; }
+
+        public double TotalPrice { get; set; }
+
+        public string ImgUrl { get; set; }
+
+        public string ReserveeFullName { get; set; }
+
+        public bool CanBeConfirmed { get; set; }
+
+        public bool IsConfirmed { get; set; }
+    }
 }

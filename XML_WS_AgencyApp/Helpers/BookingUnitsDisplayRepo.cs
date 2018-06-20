@@ -6,16 +6,17 @@ namespace XML_WS_AgencyApp.Helpers
 {
     public class BookingUnitsDisplayRepo
     {
-        public List<BookingUnitViewModel> GetBookingUnits()
+        public List<BookingUnitViewModel> GetBookingUnits(long curentUserId)
         {
             using (var ctx = new ApplicationDbContext())
             {
                 List<BookingUnit> bookingUnits = ctx.BookingUnits
                     .Include("Pictures")
                         .Include("City.Country")
-                            .AsNoTracking()
-                                .OrderBy(x => x.Name)
-                                    .ToList();
+                            .Include("Agent")
+                                .Where(x => x.Agent.Id == curentUserId)
+                                    .OrderBy(x => x.Name)
+                                        .ToList();
 
                 List<BookingUnitViewModel> retList = new List<BookingUnitViewModel>();
                 foreach (var b in bookingUnits)
