@@ -24,7 +24,7 @@
     {
         for (int i = 0; i < Model.MyReservations.Count; i++)
         {
-            if (!Model.MyReservations[i].IsConfirmed)
+            if ((int)Model.MyReservations[i].ReservationStatus == 0)
             {
                 <div class="jumbotron" style="background-color:rgba(211,211,211,0.2);  width: 600px; margin:0 auto ">
                     <div>
@@ -37,12 +37,13 @@
                     @Html.HiddenFor(m => m.MyReservations[i].Id)
                     @if (Model.MyReservations[i].CanBeConfirmed)
                     {
-                        <input type="button" class="btn btn-danger" value="Confirm" onclick="location.href='@Url.Action("ConfirmReservation", "Agent", new { reservationId = Model.MyReservations[i].Id })'" />
+                        <input type="button" class="btn btn-success" value="Confirm" onclick="location.href='@Url.Action("ConfirmReservation", "Agent", new { reservationId = Model.MyReservations[i].Id })'" />
+                        <input type="button" class="btn btn-danger" value="Cancel" onclick="location.href='@Url.Action("CancelReservation", "Agent", new { reservationId = Model.MyReservations[i].Id })'" />
                     }
                 </div>
                 <br />
             }
-            else
+            else if ((int)Model.MyReservations[i].ReservationStatus == 1)
             {
                 <div class="jumbotron" style="background-color:rgba(0,230,118,0.2);  width: 600px; margin:0 auto ">
                     <div>
@@ -57,7 +58,21 @@
                 </div>
                 <br />
             }
+            else
+            {
+                <div class="jumbotron" style="background-color:rgba(211,47,47,0.5);  width: 600px; margin:0 auto ">
+                    <div>
+                        <h2 style="color:#151515"><b style="color:#616161; font-weight:700">@Model.MyReservations[i].BookingUnitName</b> reserved by <span style="color:#444444">@Model.MyReservations[i].ReserveeFullName</span></h2>
+                        <img src=@Url.Content(Model.MyReservations[i].ImgUrl) height="128" width="128" />
+                        <h3>From <span style="color:deepskyblue">@Model.MyReservations[i].DateFrom</span> To <span style="color:deepskyblue">@Model.MyReservations[i].DateTo</span></h3>
+                    </div>
 
+                    <h2 style="color:#151515">Price: <b style="color:#000000">@Model.MyReservations[i].TotalPrice</b></h2>
+
+                    <h3 style="color:#D50000"><b style="font-weight:900">Canceled</b></h3>
+                </div>
+                <br />
+            }
         }
     }
 </div>

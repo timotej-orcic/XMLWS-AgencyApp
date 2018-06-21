@@ -212,9 +212,12 @@
     <Compile Include="Helpers\BookingUnitsDisplayRepo.cs" />
     <Compile Include="Helpers\CitiesRepository.cs" />
     <Compile Include="Helpers\CountriesRepository.cs" />
+    <Compile Include="Helpers\DTOHelper.cs" />
     <Compile Include="Helpers\MessagesDisplayRepo.cs" />
     <Compile Include="Helpers\ReservationsRepository.cs" />
+    <Compile Include="Helpers\SOAPHelper.cs" />
     <Compile Include="Helpers\TotalPriceCalculator.cs" />
+    <Compile Include="Helpers\XMLHelper.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="Models\AccomodationCategory.cs" />
     <Compile Include="Models\AccomodationType.cs" />
@@ -231,6 +234,11 @@
     <Compile Include="Models\RegisteredUserInfo.cs" />
     <Compile Include="Models\Reservation.cs" />
     <Compile Include="Models\ResponseMessage.cs" />
+    <Compile Include="Models_DTO\BookingUnit_DTO.cs" />
+    <Compile Include="Models_DTO\Message_DTO.cs" />
+    <Compile Include="Models_DTO\MonthlyPrices_DTO.cs" />
+    <Compile Include="Models_DTO\ReservationStatus_DTO.cs" />
+    <Compile Include="Models_DTO\Reservation_DTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>

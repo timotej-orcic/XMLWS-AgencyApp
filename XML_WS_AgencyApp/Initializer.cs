@@ -1,11 +1,8 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using System.Web;
-using XML_WS_AgencyApp.Models;
+﻿using XML_WS_AgencyApp.Models;
 
 namespace XML_WS_AgencyApp
 {
-    public class Initializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<ApplicationDbContext>
+    public class Initializer : System.Data.Entity.DropCreateDatabaseAlways<ApplicationDbContext>
     {
         public Initializer()
         {
@@ -15,14 +12,16 @@ namespace XML_WS_AgencyApp
         {
             Country srb = new Country
             {
-                Name = "Srbija"
+                Name = "Srbija",
+                MainServerId = 0
             };
 
             ctx.Countries.Add(srb);
 
             Country hr = new Country
             {
-                Name = "Hrvatska"
+                Name = "Hrvatska",
+                MainServerId = 1
             };
 
             ctx.Countries.Add(hr);
@@ -31,7 +30,8 @@ namespace XML_WS_AgencyApp
             {
                 Name = "Novi Sad",
                 PostalCode = "21000",
-                Country = srb
+                Country = srb,
+                MainServerId = 0
             };
 
             ctx.Cities.Add(ns);
@@ -40,7 +40,8 @@ namespace XML_WS_AgencyApp
             {
                 Name = "Beograd",
                 PostalCode = "11000",
-                Country = srb
+                Country = srb,
+                MainServerId = 1
             };
 
             ctx.Cities.Add(bg);
@@ -49,7 +50,8 @@ namespace XML_WS_AgencyApp
             {
                 Name = "Subotica",
                 PostalCode = "45000",
-                Country = srb
+                Country = srb,
+                MainServerId = 2
             };
 
             ctx.Cities.Add(su);
@@ -58,56 +60,64 @@ namespace XML_WS_AgencyApp
             {
                 Name = "Zagreb",
                 PostalCode = "10000",
-                Country = hr
+                Country = hr,
+                MainServerId = 3
             };
 
             ctx.Cities.Add(zg);
 
             AccomodationType hotel = new AccomodationType
             {
-                Name = "Hotel"
+                Name = "Hotel",
+                MainServerId = 0
             };
 
             ctx.AccomodationTypes.Add(hotel);
 
             AccomodationType bnb = new AccomodationType
             {
-                Name = "Bed & Breakfast"
+                Name = "Bed & Breakfast",
+                MainServerId = 1
             };
 
             ctx.AccomodationTypes.Add(bnb);
 
             AccomodationType apartment = new AccomodationType
             {
-                Name = "Apartment"
+                Name = "Apartment",
+                MainServerId = 2
             };
 
             ctx.AccomodationTypes.Add(apartment);
 
             BonusFeatures wifi = new BonusFeatures
             {
-                Name = "wi-fi"
+                Name = "wi-fi",
+                MainServerId = 0
             };
 
             ctx.BonusFeatures.Add(wifi);
 
             BonusFeatures tv = new BonusFeatures
             {
-                Name = "TV"
+                Name = "TV",
+                MainServerId = 1
             };
 
             ctx.BonusFeatures.Add(tv);
 
             BonusFeatures fridge = new BonusFeatures
             {
-                Name = "Refrigirator"
+                Name = "Refrigirator",
+                MainServerId = 2
             };
 
             ctx.BonusFeatures.Add(fridge);
 
             BonusFeatures ac = new BonusFeatures
             {
-                Name = "Air conditioner"
+                Name = "Air conditioner",
+                MainServerId = 3
             };
 
             ctx.BonusFeatures.Add(ac);
@@ -115,7 +125,7 @@ namespace XML_WS_AgencyApp
             AccomodationCategory noCat = new AccomodationCategory
             {
                 Name = "uncategorized",
-                MainServerId = null
+                MainServerId = 0
             };
 
             ctx.AccomodationCategories.Add(noCat);
@@ -123,7 +133,7 @@ namespace XML_WS_AgencyApp
             AccomodationCategory oneStar = new AccomodationCategory
             {
                 Name = "1 star",
-                MainServerId = null
+                MainServerId = 1
             };
 
             ctx.AccomodationCategories.Add(oneStar);
@@ -131,7 +141,7 @@ namespace XML_WS_AgencyApp
             AccomodationCategory twoStars = new AccomodationCategory
             {
                 Name = "2 stars",
-                MainServerId = null
+                MainServerId = 2
             };
 
             ctx.AccomodationCategories.Add(twoStars);
@@ -139,7 +149,7 @@ namespace XML_WS_AgencyApp
             AccomodationCategory threeStars = new AccomodationCategory
             {
                 Name = "3 stars",
-                MainServerId = null
+                MainServerId = 3
             };
 
             ctx.AccomodationCategories.Add(threeStars);
@@ -147,7 +157,7 @@ namespace XML_WS_AgencyApp
             AccomodationCategory fourStars = new AccomodationCategory
             {
                 Name = "4 stars",
-                MainServerId = null
+                MainServerId = 4
             };
 
             ctx.AccomodationCategories.Add(fourStars);
@@ -155,7 +165,7 @@ namespace XML_WS_AgencyApp
             AccomodationCategory fiveStars = new AccomodationCategory
             {
                 Name = "5 stars",
-                MainServerId = null
+                MainServerId = 5
             };
 
             ctx.AccomodationCategories.Add(fiveStars);

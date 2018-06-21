@@ -5,8 +5,6 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Web;
-using Microsoft.AspNet.Identity.Owin;
 
 namespace XML_WS_AgencyApp.Models
 {
@@ -43,6 +41,8 @@ namespace XML_WS_AgencyApp.Models
         [Required]
         [MinLength(13), MaxLength(13)]
         public string Pmb { get; set; }
+
+        public long? MainServerId { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser, long> manager)
         {
@@ -98,7 +98,8 @@ namespace XML_WS_AgencyApp.Models
                     {
                         Email = "main.admin@xml.com",
                         Pmb = "0123456789012",
-                        UserName = "MainAdmin"
+                        UserName = "MainAdmin",
+                        MainServerId = 0
                     };
                     admin = await um.CreateAsync(mainAdmin, "MAdmin123!");
                 }

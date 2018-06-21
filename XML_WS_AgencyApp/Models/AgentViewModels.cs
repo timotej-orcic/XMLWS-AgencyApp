@@ -183,6 +183,8 @@ namespace XML_WS_AgencyApp.Models
     {
         public long Id { get; set; }
 
+        public long SenderId { get; set; }
+
         public string SenderUserName { get; set; }
 
         public string Content { get; set; }
@@ -217,6 +219,6 @@ namespace XML_WS_AgencyApp.Models
 
         public bool CanBeConfirmed { get; set; }
 
-        public bool IsConfirmed { get; set; }
+        public ReservationStatus ReservationStatus { get; set; }
     }
 }

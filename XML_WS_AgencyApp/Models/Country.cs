@@ -10,6 +10,8 @@ namespace XML_WS_AgencyApp.Models
         [Key]
         public long Id { get; set; }
 
+        public long? MainServerId { get; set; }
+
         [Required]
         [MaxLength(90)]
         public string Name { get; set; }

@@ -54,6 +54,7 @@ else
             <form class="form-horizontal">
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 @Html.HiddenFor(m => m.Id)
+                @Html.HiddenFor(m => m.SenderId)
                 @Html.HiddenFor(m => m.SenderUserName)
                 <div class="row">
                     <div class="form-group">

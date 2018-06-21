@@ -54,6 +54,7 @@ namespace XML_WS_AgencyApp.Helpers
                     retVM = new OpenedMessageViewModel
                     {
                         Id = msg.Id,
+                        SenderId = msg.RegisteredUserInfo.Id,
                         Content = msg.Content,
                         HasResponse = msg.HasResponse,
                         SenderUserName = msg.RegisteredUserInfo.UserName

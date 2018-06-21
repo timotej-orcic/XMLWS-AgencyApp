@@ -10,6 +10,8 @@ namespace XML_WS_AgencyApp.Models
         [Key]
         public long Id { get; set; }
 
+        public long? MainServerId { get; set; }
+
         [Required]
         [Range(typeof(double), "1", "1000000000")]
         public double Amount { get; set; }

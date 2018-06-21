@@ -30,10 +30,10 @@ namespace XML_WS_AgencyApp.Helpers
                         {
                             Id = r.Id,
                             BookingUnitName = r.BookingUnit.Name,
-                            DateFrom = string.Format("{0}/{1}/{2}", r.From.Month, r.From.Day, r.From.Year),
-                            DateTo = string.Format("{0}/{1}/{2}", r.To.Month, r.To.Day, r.To.Year),
+                            DateFrom = string.Format("{0}/{1}/{2}", r.From.Year, r.From.Month, r.From.Day),
+                            DateTo = string.Format("{0}/{1}/{2}", r.To.Year, r.To.Month, r.To.Day),
                             ImgUrl = r.BookingUnit.Pictures.First().Value,
-                            IsConfirmed = r.Confirmed,
+                            ReservationStatus = r.ReservationStatus,
                             ReserveeFullName = r.SubjectName + " " + r.SubjectSurname,
                             TotalPrice = r.TotalPrice,
                             CanBeConfirmed = canConfirm

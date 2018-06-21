@@ -9,6 +9,8 @@ namespace XML_WS_AgencyApp.Models
         [Key]
         public long Id { get; set; }
 
+        public long? MainServerId { get; set; }
+
         [MaxLength(1000)]
         public string Content { get; set; }
     }

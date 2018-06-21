@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using XML_WS_AgencyApp.Helpers;
 using XML_WS_AgencyApp.Models;
+using XML_WS_AgencyApp.Models_DTO;
 
 namespace XML_WS_AgencyApp.Controllers
 {
@@ -34,7 +35,6 @@ namespace XML_WS_AgencyApp.Controllers
             }                
         }
 
-        //isto moze samo kroz glavni server, kako se dogovorimo
         [HttpGet]
         public ActionResult GetCitiesByCountryId(string countryId)
         {
@@ -153,82 +153,100 @@ namespace XML_WS_AgencyApp.Controllers
             {
                 if(ModelState.IsValid)
                 {
-                    //send a request on the main server and await for the response
-                    bool serverResp = true;
+                    DTOHelper dtoHlp = new DTOHelper();
+                    bool imgValidation = dtoHlp.ValidateImageTypes(anbuVM.Images);
 
-                    if(serverResp)
+                    if(imgValidation)
                     {
-                        //save localy
-                        using (var ctx = new ApplicationDbContext())
+                        long curentUserId = User.Identity.GetUserId<long>();
+
+                        //send a request on the main server and await for the response
+                        BookingUnit_DTO buDTO = dtoHlp.GetBookingUnit_DTO(anbuVM, curentUserId);
+                        var xmlHelper = new XMLHelper();
+                        string xmlPayload = xmlHelper.SerializeToXml(buDTO);
+
+                        //call soap service
+                        bool serverResp = true;
+
+                        if (serverResp)
                         {
-                            //create a new booking unit with all the prerequisits
-                            City myCity = ctx.Cities.FirstOrDefault(x => x.Id.ToString() == anbuVM.CityId);
-                            string curentUserId = User.Identity.GetUserId();
-                            ApplicationUser agentUsr = ctx.Users.FirstOrDefault(x => x.Id.ToString() == curentUserId);
-                            AccomodationType myAccType = ctx.AccomodationTypes.FirstOrDefault(x => x.Id.ToString() == anbuVM.AccomodationTypeId);
-                            AccomodationCategory myAccCat = ctx.AccomodationCategories.FirstOrDefault(x => x.Id.ToString() == anbuVM.AccomodationCategoryId);
-
-                            ICollection<BonusFeatures> myBonusFeatures = new List<BonusFeatures>();                       
-                            foreach(var bfvm in anbuVM.BonusFeatures)
+                            //save localy
+                            using (var ctx = new ApplicationDbContext())
                             {
-                                if(bfvm.IsSelected)
+                                //create a new booking unit with all the prerequisits
+                                City myCity = ctx.Cities.FirstOrDefault(x => x.Id.ToString() == anbuVM.CityId);
+                                ApplicationUser agentUsr = ctx.Users.FirstOrDefault(x => x.Id == curentUserId);
+                                AccomodationType myAccType = ctx.AccomodationTypes.FirstOrDefault(x => x.Id.ToString() == anbuVM.AccomodationTypeId);
+                                AccomodationCategory myAccCat = ctx.AccomodationCategories.FirstOrDefault(x => x.Id.ToString() == anbuVM.AccomodationCategoryId);
+
+                                ICollection<BonusFeatures> myBonusFeatures = new List<BonusFeatures>();
+                                foreach (var bfvm in anbuVM.BonusFeatures)
                                 {
-                                    var myBFeature = ctx.BonusFeatures.FirstOrDefault(x => x.Id == bfvm.Id);
-                                    if (myBFeature != null)
-                                        myBonusFeatures.Add(myBFeature);
+                                    if (bfvm.IsSelected)
+                                    {
+                                        var myBFeature = ctx.BonusFeatures.FirstOrDefault(x => x.Id == bfvm.Id);
+                                        if (myBFeature != null)
+                                            myBonusFeatures.Add(myBFeature);
+                                    }
                                 }
-                            }
 
-                            BookingUnit newUnit = new BookingUnit
-                            {
-                                Name = anbuVM.Name,
-                                Address = anbuVM.Address,
-                                City = myCity,
-                                Description = anbuVM.Description,
-                                PeopleNo = anbuVM.PeopleNo,
-                                Agent = agentUsr,
-                                AccomodationType = myAccType,
-                                AccomodationCategory = myAccCat,
-                                BonusFeatures = myBonusFeatures
-                            };
-
-                            //add the new unit to the DBContext
-                            ctx.BookingUnits.Add(newUnit);
-
-                            //get uploaded images and save them on the server
-                            var uploadDir = "~/uploadedImages";
-
-                            foreach (var imgUpl in anbuVM.Images)
-                            {
-                                string newFileName = string.Concat(Path.GetFileNameWithoutExtension(imgUpl.FileName)
-                                                            , DateTime.Now.ToString("_yyyy_MM_dd_HH_mm_ss")
-                                                                , Path.GetExtension(imgUpl.FileName)
-                                                                    );
-                                var imagePath = Path.Combine(Server.MapPath(uploadDir), newFileName);
-                                imgUpl.SaveAs(imagePath);
-
-                                var imageUrl = Path.Combine(uploadDir, newFileName);
-                                BookingUnitPicture newPicture = new BookingUnitPicture
+                                BookingUnit newUnit = new BookingUnit
                                 {
-                                    BookingUnit = newUnit,
-                                    Value = imageUrl
+                                    Name = anbuVM.Name,
+                                    Address = anbuVM.Address,
+                                    City = myCity,
+                                    Description = anbuVM.Description,
+                                    PeopleNo = anbuVM.PeopleNo,
+                                    Agent = agentUsr,
+                                    AccomodationType = myAccType,
+                                    AccomodationCategory = myAccCat,
+                                    BonusFeatures = myBonusFeatures
                                 };
-                                ctx.Pictures.Add(newPicture);
-                            }
 
-                            //save changes
-                            ctx.SaveChanges();
+                                //add the new unit to the DBContext
+                                ctx.BookingUnits.Add(newUnit);
+
+                                //get uploaded images and save them on the server
+                                var uploadDir = "~/uploadedImages";
+
+                                foreach (var imgUpl in anbuVM.Images)
+                                {
+                                    string newFileName = string.Concat(Path.GetFileNameWithoutExtension(imgUpl.FileName)
+                                                                , DateTime.Now.ToString("_yyyy_MM_dd_HH_mm_ss")
+                                                                    , Path.GetExtension(imgUpl.FileName)
+                                                                        );
+                                    var imagePath = Path.Combine(Server.MapPath(uploadDir), newFileName);
+                                    imgUpl.SaveAs(imagePath);
+
+                                    var imageUrl = Path.Combine(uploadDir, newFileName);
+                                    BookingUnitPicture newPicture = new BookingUnitPicture
+                                    {
+                                        BookingUnit = newUnit,
+                                        Value = imageUrl
+                                    };
+                                    ctx.Pictures.Add(newPicture);
+                                }
+
+                                //save changes
+                                ctx.SaveChanges();
+                            }
                         }
+                        else
+                        {
+                            //some error happened, retry
+                            TempData["error"] = "Main server error";
+                            return RedirectToAction("AddNewBookingUnit", "Agent");
+                        }
+
+                        TempData["success"] = "Successfully added a new booking unit";
+                        return RedirectToAction("AgentPage", "Agent");
                     }
                     else
                     {
-                        //some error happened, retry
-                        TempData["error"] = "Main server error";
+                        //image type exception
+                        TempData["error"] = "Wrong image type, please try again";
                         return RedirectToAction("AddNewBookingUnit", "Agent");
                     }
-
-                    TempData["success"] = "Successfully added a new booking unit";
-                    return RedirectToAction("AgentPage", "Agent");
                 }
                 else
                 {
@@ -248,6 +266,11 @@ namespace XML_WS_AgencyApp.Controllers
                 if (ModelState.IsValid)
                 {
                     //send a request on the main server and await for the response
+                    DTOHelper dtoHlp = new DTOHelper();
+                    MonthlyPrices_DTO mpDTO = dtoHlp.GetMonthlyPrices_DTO(mpVM);
+                    var xmlHelper = new XMLHelper();
+                    string xmlPayload = xmlHelper.SerializeToXml(mpDTO);
+
                     bool serverResp = true;
 
                     bool isUpdate = false;
@@ -372,6 +395,11 @@ namespace XML_WS_AgencyApp.Controllers
                     if(totalDays <= 30 && isCorrectDate)
                     {
                         //send a request on the main server and await for the response
+                        DTOHelper dtoHlp = new DTOHelper();
+                        Reservation_DTO resDTO = dtoHlp.GetReservation_DTO(lrVM);
+                        var xmlHelper = new XMLHelper();
+                        string xmlPayload = xmlHelper.SerializeToXml(resDTO);
+
                         bool serverResp = true;
 
                         if (serverResp)
@@ -385,7 +413,7 @@ namespace XML_WS_AgencyApp.Controllers
 
                                 Reservation localReservation = new Reservation
                                 {
-                                    Confirmed = false,
+                                    ReservationStatus = ReservationStatus.WAITING,
                                     SubjectName = lrVM.ReserveeFirstName,
                                     SubjectSurname = lrVM.ReserveeLastName,
                                     From = lrVM.DateFrom,
@@ -436,6 +464,12 @@ namespace XML_WS_AgencyApp.Controllers
                 if(ModelState.IsValid)
                 {
                     //send a request on the main server and await for the response
+                    long curentUserId = User.Identity.GetUserId<long>();
+                    DTOHelper dtoHlp = new DTOHelper();
+                    Message_DTO msgDTO = dtoHlp.GetMessage_DTO(omVM, curentUserId);
+                    var xmlHelper = new XMLHelper();
+                    string xmlPayload = xmlHelper.SerializeToXml(msgDTO);
+
                     bool serverResp = true;
 
                     if (serverResp)
@@ -484,6 +518,11 @@ namespace XML_WS_AgencyApp.Controllers
                 if (ModelState.IsValid)
                 {
                     //send a request on the main server and await for the response
+                    DTOHelper dtoHlp = new DTOHelper();
+                    ReservationStatus_DTO rsDTO = dtoHlp.GetReservationStatus_DTO(reservationID, ReservationStatus.CONFIRMED);
+                    var xmlHelper = new XMLHelper();
+                    string xmlPayload = xmlHelper.SerializeToXml(rsDTO);
+
                     bool serverResp = true;
 
                     if (serverResp)
@@ -492,7 +531,7 @@ namespace XML_WS_AgencyApp.Controllers
                         using (var ctx = new ApplicationDbContext())
                         {
                             Reservation res = ctx.Reservations.FirstOrDefault(x => x.Id == reservationID);
-                            res.Confirmed = true;
+                            res.ReservationStatus = ReservationStatus.CONFIRMED;
                             ctx.SaveChanges();
                         }
                     }
@@ -504,6 +543,51 @@ namespace XML_WS_AgencyApp.Controllers
                     }
 
                     TempData["success"] = "Successfully confirmed the reservation";
+                    return RedirectToAction("MyReservations", "Agent");
+                }
+                else
+                {
+                    //invalid VM exception
+                    TempData["error"] = "Some form atributes are incorrect";
+                    return RedirectToAction("MyReservations", "Agent");
+                }
+            }
+        }
+
+        public async Task<ActionResult> CancelReservation(long reservationID)
+        {
+            if (!Request.IsAuthenticated)
+                return RedirectToAction("Login", "Account");
+            else
+            {
+                if (ModelState.IsValid)
+                {
+                    //send a request on the main server and await for the response
+                    DTOHelper dtoHlp = new DTOHelper();
+                    ReservationStatus_DTO rsDTO = dtoHlp.GetReservationStatus_DTO(reservationID, ReservationStatus.CANCELED);
+                    var xmlHelper = new XMLHelper();
+                    string xmlPayload = xmlHelper.SerializeToXml(rsDTO);
+
+                    bool serverResp = true;
+
+                    if (serverResp)
+                    {
+                        //save localy
+                        using (var ctx = new ApplicationDbContext())
+                        {
+                            Reservation res = ctx.Reservations.FirstOrDefault(x => x.Id == reservationID);
+                            res.ReservationStatus = ReservationStatus.CANCELED;
+                            ctx.SaveChanges();
+                        }
+                    }
+                    else
+                    {
+                        //some error happened, retry
+                        TempData["error"] = "Main server error";
+                        return RedirectToAction("MyReservations", "Agent");
+                    }
+
+                    TempData["success"] = "Successfully cancelled the reservation";
                     return RedirectToAction("MyReservations", "Agent");
                 }
                 else
