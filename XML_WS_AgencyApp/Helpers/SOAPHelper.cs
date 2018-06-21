@@ -50,7 +50,7 @@ namespace XML_WS_AgencyApp.Helpers
                             xmlns:soap=""http://schemas.xmlsoap.org/soap/envelope/"">
                             <soap:Body>"
                             + payload +
-                            @"</soap:Body></soap:Envelope>";
+                            @"</root></soap:Body></soap:Envelope>";
 
             soapEnvelopeDocument.LoadXml(xmlStr);
             return soapEnvelopeDocument;

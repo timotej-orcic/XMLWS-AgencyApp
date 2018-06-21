@@ -13,6 +13,8 @@ namespace XML_WS_AgencyApp.Controllers
 {
     public class AgentController : Controller
     {
+        public static readonly string SOAP_URL = "http://localhost:8081/ftn-booking.com/soap-api/agentEndpointService";
+
         // GET: AgentPage
         public ActionResult AgentPage()
         {
@@ -164,6 +166,7 @@ namespace XML_WS_AgencyApp.Controllers
                         BookingUnit_DTO buDTO = dtoHlp.GetBookingUnit_DTO(anbuVM, curentUserId);
                         var xmlHelper = new XMLHelper();
                         string xmlPayload = xmlHelper.SerializeToXml(buDTO);
+                        SOAPHelper.CallWebService(SOAP_URL, "agentLogin", xmlPayload);
 
                         //call soap service
                         bool serverResp = true;

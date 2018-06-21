@@ -14,6 +14,7 @@ namespace XML_WS_AgencyApp.Helpers
             XmlSerializer serializer = GetXmlSerializer<T>(myObject);
             writer.WriteStartElement("root");
             serializer.Serialize(writer, myObject);
+            writer.WriteEndElement();
 
             s.Position = 0;
             StreamReader sr = new StreamReader(s);
