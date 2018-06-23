@@ -84,6 +84,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -240,6 +242,11 @@
     <Compile Include="Models_DTO\ReservationStatus_DTO.cs" />
     <Compile Include="Models_DTO\Reservation_DTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service References\MyRemoteServices\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -319,6 +326,12 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
+    <None Include="Service References\MyRemoteServices\configuration91.svcinfo" />
+    <None Include="Service References\MyRemoteServices\configuration.svcinfo" />
+    <None Include="Service References\MyRemoteServices\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -343,6 +356,49 @@
     <Content Include="Views\Agent\ClientMessaging.cshtml" />
     <Content Include="Views\Agent\OpenMessage.cshtml" />
     <Content Include="Views\Agent\MyReservations.cshtml" />
+    <None Include="Service References\MyRemoteServices\agentEndpoint.wsdl" />
+    <Content Include="Service References\MyRemoteServices\XML_WS_AgencyApp.MyRemoteServices.addBookingUnitResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\MyRemoteServices\XML_WS_AgencyApp.MyRemoteServices.addBookingUnitResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\MyRemoteServices\XML_WS_AgencyApp.MyRemoteServices.addLocalReservationResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\MyRemoteServices\XML_WS_AgencyApp.MyRemoteServices.addLocalReservationResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\MyRemoteServices\XML_WS_AgencyApp.MyRemoteServices.agentLoginResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\MyRemoteServices\XML_WS_AgencyApp.MyRemoteServices.agentLoginResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\MyRemoteServices\XML_WS_AgencyApp.MyRemoteServices.cancelReservationResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\MyRemoteServices\XML_WS_AgencyApp.MyRemoteServices.cancelReservationResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\MyRemoteServices\XML_WS_AgencyApp.MyRemoteServices.confirmReservationResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\MyRemoteServices\XML_WS_AgencyApp.MyRemoteServices.confirmReservationResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\MyRemoteServices\XML_WS_AgencyApp.MyRemoteServices.manageMonthlyPricesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\MyRemoteServices\XML_WS_AgencyApp.MyRemoteServices.manageMonthlyPricesResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\MyRemoteServices\XML_WS_AgencyApp.MyRemoteServices.sendMessageResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\MyRemoteServices\XML_WS_AgencyApp.MyRemoteServices.sendMessageResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -354,6 +410,12 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\MyRemoteServices\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -373,7 +435,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50464</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:50464/</IISUrl>
+          <IISUrl>http://localhost:50465/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

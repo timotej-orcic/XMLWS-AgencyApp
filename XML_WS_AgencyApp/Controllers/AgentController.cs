@@ -13,7 +13,7 @@ namespace XML_WS_AgencyApp.Controllers
 {
     public class AgentController : Controller
     {
-        public static readonly string SOAP_URL = "http://localhost:8081/ftn-booking.com/soap-api/agentEndpointService";
+        public static readonly string SOAP_URL = "http://localhost:9090/soap-api/agentEndpointService";
 
         // GET: AgentPage
         public ActionResult AgentPage()
@@ -163,15 +163,12 @@ namespace XML_WS_AgencyApp.Controllers
                         long curentUserId = User.Identity.GetUserId<long>();
 
                         //send a request on the main server and await for the response
-                        BookingUnit_DTO buDTO = dtoHlp.GetBookingUnit_DTO(anbuVM, curentUserId);
-                        var xmlHelper = new XMLHelper();
-                        string xmlPayload = xmlHelper.SerializeToXml(buDTO);
-                        SOAPHelper.CallWebService(SOAP_URL, "agentLogin", xmlPayload);
+                        MyRemoteServices.AgentEndpointPortClient aepc = new MyRemoteServices.AgentEndpointPortClient();
+                        //MyRemoteServices.addBookingUnitRequest abuRequest = dtoHlp.GetBookingUnitRequest(anbuVM, curentUserId);
+                        MyRemoteServices.addBookingUnitResponse abuResponse = aepc.addBookingUnit(abuRequest);
 
-                        //call soap service
-                        bool serverResp = true;
 
-                        if (serverResp)
+                        if (abuResponse.responseWrapper.success)
                         {
                             //save localy
                             using (var ctx = new ApplicationDbContext())
@@ -203,7 +200,8 @@ namespace XML_WS_AgencyApp.Controllers
                                     Agent = agentUsr,
                                     AccomodationType = myAccType,
                                     AccomodationCategory = myAccCat,
-                                    BonusFeatures = myBonusFeatures
+                                    BonusFeatures = myBonusFeatures,
+                                    MainServerId = (long?)abuResponse.responseWrapper.responseBody
                                 };
 
                                 //add the new unit to the DBContext
@@ -237,7 +235,7 @@ namespace XML_WS_AgencyApp.Controllers
                         else
                         {
                             //some error happened, retry
-                            TempData["error"] = "Main server error";
+                            TempData["error"] = abuResponse.responseWrapper.message;
                             return RedirectToAction("AddNewBookingUnit", "Agent");
                         }
 

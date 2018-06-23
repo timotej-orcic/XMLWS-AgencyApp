@@ -12,7 +12,7 @@ namespace XML_WS_AgencyApp.Helpers
             Stream s = new MemoryStream();
             XmlWriter writer = new XmlTextWriter(s, Encoding.UTF8);
             XmlSerializer serializer = GetXmlSerializer<T>(myObject);
-            writer.WriteStartElement("root");
+            writer.WriteStartElement(@"root xmlns='http://agentservice'");
             serializer.Serialize(writer, myObject);
             writer.WriteEndElement();
 

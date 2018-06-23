@@ -22,6 +22,6 @@ namespace XML_WS_AgencyApp.Models_DTO
 
         public List<long> BonusFeaturesMainServerIds { get; set; }
 
-        public List<string> Base64ImagesList { get; set; }
+        public Dictionary<string,string> Base64ImagesList { get; set; }
     }
 }

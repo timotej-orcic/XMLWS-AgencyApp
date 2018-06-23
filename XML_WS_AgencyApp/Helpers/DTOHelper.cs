@@ -34,7 +34,7 @@ namespace XML_WS_AgencyApp.Helpers
             return retVal;
         }
 
-        public BookingUnit_DTO GetBookingUnit_DTO(AddNewBookingUnitViewModel anbuVM, long curentUserId)
+        /*public MyRemoteServices.addBookingUnitRequest GetBookingUnitRequest(AddNewBookingUnitViewModel anbuVM, long curentUserId)
         {
             using (var ctx = new ApplicationDbContext())
             {
@@ -43,43 +43,46 @@ namespace XML_WS_AgencyApp.Helpers
                 long accTypeId = (long)ctx.AccomodationTypes.FirstOrDefault(x => x.Id.ToString() == anbuVM.AccomodationTypeId).MainServerId;
                 long agentId = (long)ctx.Users.FirstOrDefault(x => x.Id == curentUserId).MainServerId;
 
-                List<long> bonusFeaturesIds = new List<long>();
-                foreach(var b in anbuVM.BonusFeatures)
+                int bfCnt = anbuVM.BonusFeatures.Count;
+                long?[] bonusFeaturesIds = new long?[bfCnt];
+                for(int i = 0; i < bfCnt; i++)
                 {
-                    long bfId = (long)ctx.BonusFeatures.FirstOrDefault(x => x.Id == b.Id).MainServerId;
-                    bonusFeaturesIds.Add(bfId);
+                    var bonusFeature = anbuVM.BonusFeatures[i];
+                    if (bonusFeature.IsSelected)
+                    {
+                        long currentId = bonusFeature.Id;
+                        long bfId = (long)ctx.BonusFeatures.FirstOrDefault(x => x.Id == currentId).MainServerId;
+                        bonusFeaturesIds[i] = bfId;
+                    }
                 }
 
-                List<string> base64ImagesList = new List<string>();
-                foreach(var file in anbuVM.Images)
+                int imgCnt = anbuVM.Images.Length;
+                for(int i = 0; i < imgCnt; i++)
                 {
+                    var file = anbuVM.Images[i];
+                    string imgName = file.FileName;
                     byte[] thePictureAsBytes = new byte[file.ContentLength];
                     using (BinaryReader reader = new BinaryReader(file.InputStream))
                     {
                         thePictureAsBytes = reader.ReadBytes(file.ContentLength);
                     }
                     string thePictureDataAsString = Convert.ToBase64String(thePictureAsBytes);
-                    base64ImagesList.Add(thePictureDataAsString);
+                    base64ImagesList[i] = new MyRemoteServices.bookingUnitDTOEntry
+                    {
+                        key = imgName,
+                        value = thePictureDataAsString
+                    };
                 }
 
 
-                BookingUnit_DTO retObj = new BookingUnit_DTO
+                MyRemoteServices.addBookingUnitRequest retObj = new MyRemoteServices.addBookingUnitRequest
                 {
-                    Name = anbuVM.Name,
-                    Address = anbuVM.Address,
-                    Description = anbuVM.Description,
-                    PeopleNo = anbuVM.PeopleNo,
-                    CityMainServerId = cityId,
-                    AccomodationCategoryMainServerId = accCatId,
-                    AccomodationTypeMainServerId = accTypeId,
-                    AgentMainServerId = agentId,
-                    BonusFeaturesMainServerIds = bonusFeaturesIds,
-                    Base64ImagesList = base64ImagesList
+                    
                 };
 
                 return retObj;
             }
-        }
+        }*/
 
         public MonthlyPrices_DTO GetMonthlyPrices_DTO(MonthlyPricesViewModel mpVM)
         {

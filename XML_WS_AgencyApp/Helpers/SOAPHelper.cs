@@ -34,10 +34,11 @@ namespace XML_WS_AgencyApp.Helpers
 
         private static HttpWebRequest CreateWebRequest(string url, string action)
         {
-            HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(url);
-            webRequest.Headers.Add("SOAPAction", action);
+            string completeUri = url + "/" + action;
+            HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(completeUri);
+            webRequest.Headers.Add(@"SOAP:Action" + completeUri);
             webRequest.ContentType = "text/xml;charset=\"utf-8\"";
-            webRequest.Accept = "text/xml";
+            webRequest.Accept = "text/plain";
             webRequest.Method = "POST";
             return webRequest;
         }
@@ -45,12 +46,24 @@ namespace XML_WS_AgencyApp.Helpers
         private static XmlDocument CreateSoapEnvelope(string payload)
         {
             XmlDocument soapEnvelopeDocument = new XmlDocument();
-            string xmlStr = @"<?xml version=""1.0"" encoding=""utf-8""?>
+
+            string xmlStr;
+            if (payload == "")
+            {
+                xmlStr = @"<?xml version=""1.0"" encoding=""utf-8""?>
+                            <soap:Envelope xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" 
+                            xmlns:soap=""http://schemas.xmlsoap.org/soap/envelope/"">
+                            <soap:Body></soap:Body></soap:Envelope>";
+            }
+            else
+            {
+                xmlStr = @"<?xml version=""1.0"" encoding=""utf-8""?>
                             <soap:Envelope xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" 
                             xmlns:soap=""http://schemas.xmlsoap.org/soap/envelope/"">
                             <soap:Body>"
-                            + payload +
-                            @"</root></soap:Body></soap:Envelope>";
+                + payload +
+                @"</root></soap:Body></soap:Envelope>";
+            }
 
             soapEnvelopeDocument.LoadXml(xmlStr);
             return soapEnvelopeDocument;
