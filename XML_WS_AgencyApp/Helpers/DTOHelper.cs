@@ -98,7 +98,7 @@ namespace XML_WS_AgencyApp.Helpers
             }
         }
 
-        public MonthlyPrices_DTO GetMonthlyPrices_DTO(MonthlyPricesViewModel mpVM)
+        public MyRemoteServices.manageMonthlyPricesRequest GetMonthlyPricesRequest(MonthlyPricesViewModel mpVM)
         {
             using (var ctx = new ApplicationDbContext())
             {
@@ -118,19 +118,23 @@ namespace XML_WS_AgencyApp.Helpers
                 myMonths[10] = mpVM.NovemberPrice;
                 myMonths[11] = mpVM.DecemberPrice;
 
-
-                MonthlyPrices_DTO retObj = new MonthlyPrices_DTO
+                MyRemoteServices.MonthlyPrices prices = new MyRemoteServices.MonthlyPrices
                 {
-                    BookingUnitMainServerId = bookingUnitId,
-                    Year = mpVM.Year,
-                    MonthlyPrices = myMonths
+                    mainServerId = bookingUnitId,
+                    monthlyPrices = myMonths,
+                    year = mpVM.Year
+                };
+
+                MyRemoteServices.manageMonthlyPricesRequest retObj = new MyRemoteServices.manageMonthlyPricesRequest
+                {
+                    monthlyPrice = prices
                 };
 
                 return retObj;
             }
         }
 
-        public Reservation_DTO GetReservation_DTO(LocalReservationViewModel lrVM)
+        public MyRemoteServices.addLocalReservationRequest GetLocalReservationRequest(LocalReservationViewModel lrVM)
         {
             using (var ctx = new ApplicationDbContext())
             {
@@ -138,47 +142,83 @@ namespace XML_WS_AgencyApp.Helpers
                 string dateFrom = string.Format("{0}/{1}/{2}", lrVM.DateFrom.Year, lrVM.DateFrom.Month, lrVM.DateFrom.Day);
                 string dateTo = string.Format("{0}/{1}/{2}", lrVM.DateTo.Year, lrVM.DateTo.Month, lrVM.DateTo.Day);
 
-                Reservation_DTO retObj = new Reservation_DTO
+                MyRemoteServices.Reservation resData = new MyRemoteServices.Reservation
                 {
-                    BookingUnitMainServerId = bookingUnitId,
-                    DateFrom = dateFrom,
-                    DateTo = dateTo,
-                    ReserveeFirstName = lrVM.ReserveeFirstName,
-                    ReserveeLastName = lrVM.ReserveeLastName
+                    bookingUnitMainServerId = bookingUnitId,
+                    dateFrom = dateFrom,
+                    dateTo = dateTo,
+                    reserveeFirstName = lrVM.ReserveeFirstName,
+                    reserveeLastName = lrVM.ReserveeLastName
+                };
+
+                MyRemoteServices.addLocalReservationRequest retObj = new MyRemoteServices.addLocalReservationRequest
+                {
+                    localReservation = resData
                 };
 
                 return retObj;
             }
         }
 
-        public Message_DTO GetMessage_DTO(OpenedMessageViewModel omVM, long curentUserId)
+        public MyRemoteServices.sendMessageRequest GetMessageRequest(OpenedMessageViewModel omVM, long curentUserId)
         {
             using (var ctx = new ApplicationDbContext())
             {
                 long agentId = (long)ctx.Users.FirstOrDefault(x => x.Id == curentUserId).MainServerId;
                 long userReceiverId = (long)ctx.RegisteredUsersInfo.FirstOrDefault(x => x.Id == omVM.SenderId).MainServerId;
 
-                Message_DTO retObj = new Message_DTO
+                MyRemoteServices.Message msgData = new MyRemoteServices.Message
                 {
-                    Content = omVM.Content,
-                    SenderAgentMainServerId = agentId,
-                    ReceiverUserMainServerId = userReceiverId
+                    content = omVM.Content,
+                    senderAgentMainServerId = agentId,
+                    receiverUserMainServerId = userReceiverId
+                };
+
+                MyRemoteServices.sendMessageRequest retObj = new MyRemoteServices.sendMessageRequest
+                {
+                    message = msgData
                 };
 
                 return retObj;
             }
         }
 
-        public ReservationStatus_DTO GetReservationStatus_DTO(long reservationId, ReservationStatus rStatus)
+        public MyRemoteServices.confirmReservationRequest GetConfirmReservationRequest(long reservationId, ReservationStatus rStatus)
         {
             using (var ctx = new ApplicationDbContext())
             {
                 long serverId = (long)ctx.Reservations.FirstOrDefault(x => x.Id == reservationId).MainServerId;
 
-                ReservationStatus_DTO retObj = new ReservationStatus_DTO
+                MyRemoteServices.ReservationLite resData = new MyRemoteServices.ReservationLite
                 {
-                    ReservationMainServerId = serverId,
-                    ReservationStatus = rStatus
+                    reservationMainServerId = serverId,
+                    reservationStatus = (MyRemoteServices.ReservationStatus)rStatus                    
+                };
+
+                MyRemoteServices.confirmReservationRequest retObj = new MyRemoteServices.confirmReservationRequest
+                {
+                    reservationLite = resData
+                };
+
+                return retObj;
+            }
+        }
+
+        public MyRemoteServices.cancelReservationRequest GetCancelReservationRequest(long reservationId, ReservationStatus rStatus)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                long serverId = (long)ctx.Reservations.FirstOrDefault(x => x.Id == reservationId).MainServerId;
+
+                MyRemoteServices.ReservationLite resData = new MyRemoteServices.ReservationLite
+                {
+                    reservationMainServerId = serverId,
+                    reservationStatus = (MyRemoteServices.ReservationStatus)rStatus
+                };
+
+                MyRemoteServices.cancelReservationRequest retObj = new MyRemoteServices.cancelReservationRequest
+                {
+                    reservationLite = resData
                 };
 
                 return retObj;

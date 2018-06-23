@@ -147,7 +147,7 @@ namespace XML_WS_AgencyApp.Controllers
             }
         }
 
-        public async Task<ActionResult> AddBookingUnit(AddNewBookingUnitViewModel anbuVM)
+        public ActionResult AddBookingUnit(AddNewBookingUnitViewModel anbuVM)
         {
             if (!Request.IsAuthenticated)
                 return RedirectToAction("Login", "Account");
@@ -258,7 +258,7 @@ namespace XML_WS_AgencyApp.Controllers
             }
         }
 
-        public async Task<ActionResult> AddMonthlyPrices(MonthlyPricesViewModel mpVM)
+        public ActionResult AddMonthlyPrices(MonthlyPricesViewModel mpVM)
         {
             if (!Request.IsAuthenticated)
                 return RedirectToAction("Login", "Account");
@@ -268,14 +268,12 @@ namespace XML_WS_AgencyApp.Controllers
                 {
                     //send a request on the main server and await for the response
                     DTOHelper dtoHlp = new DTOHelper();
-                    MonthlyPrices_DTO mpDTO = dtoHlp.GetMonthlyPrices_DTO(mpVM);
-                    var xmlHelper = new XMLHelper();
-                    string xmlPayload = xmlHelper.SerializeToXml(mpDTO);
-
-                    bool serverResp = true;
+                    MyRemoteServices.AgentEndpointPortClient aepc = new MyRemoteServices.AgentEndpointPortClient();
+                    MyRemoteServices.manageMonthlyPricesRequest ampRequest = dtoHlp.GetMonthlyPricesRequest(mpVM);
+                    MyRemoteServices.manageMonthlyPricesResponse ampResponse = aepc.manageMonthlyPrices(ampRequest);
 
                     bool isUpdate = false;
-                    if(serverResp)
+                    if(ampResponse.responseWrapper.success)
                     {
                         //save localy
                         using (var ctx = new ApplicationDbContext())
@@ -307,6 +305,8 @@ namespace XML_WS_AgencyApp.Controllers
                                 myMonths[10] = mpVM.NovemberPrice;
                                 myMonths[11] = mpVM.DecemberPrice;
 
+                                long[] myMainServedIds = (long[])ampResponse.responseWrapper.responseBody;
+
                                 for (int i = 0; i < 12; i++)
                                 {
                                     MonthlyPrices newMp = new MonthlyPrices
@@ -314,7 +314,8 @@ namespace XML_WS_AgencyApp.Controllers
                                         Year = mpVM.Year,
                                         Month = i + 1,
                                         BookingUnit = myUnit,
-                                        Amount = myMonths[i]
+                                        Amount = myMonths[i],
+                                        MainServerId = myMainServedIds[i]                                        
                                     };
                                     ctx.MonthlyPrices.Add(newMp);
                                 }
@@ -360,7 +361,7 @@ namespace XML_WS_AgencyApp.Controllers
                     else
                     {
                         //some error happened, retry
-                        TempData["error"] = "Main server error";
+                        TempData["error"] = ampResponse.responseWrapper.message;
                         return RedirectToAction("ManageMonhtlyPrices", "Agent", new { bookingUnitId = mpVM.BookingUnitId });
                     }
 
@@ -378,7 +379,7 @@ namespace XML_WS_AgencyApp.Controllers
             }
         }
 
-        public async Task<ActionResult> AddLocalReservation(LocalReservationViewModel lrVM)
+        public ActionResult AddLocalReservation(LocalReservationViewModel lrVM)
         {
             if (!Request.IsAuthenticated)
                 return RedirectToAction("Login", "Account");
@@ -397,13 +398,11 @@ namespace XML_WS_AgencyApp.Controllers
                     {
                         //send a request on the main server and await for the response
                         DTOHelper dtoHlp = new DTOHelper();
-                        Reservation_DTO resDTO = dtoHlp.GetReservation_DTO(lrVM);
-                        var xmlHelper = new XMLHelper();
-                        string xmlPayload = xmlHelper.SerializeToXml(resDTO);
+                        MyRemoteServices.AgentEndpointPortClient aepc = new MyRemoteServices.AgentEndpointPortClient();
+                        MyRemoteServices.addLocalReservationRequest alrRequest = dtoHlp.GetLocalReservationRequest(lrVM);
+                        MyRemoteServices.addLocalReservationResponse alrResponse = aepc.addLocalReservation(alrRequest);                       
 
-                        bool serverResp = true;
-
-                        if (serverResp)
+                        if (alrResponse.responseWrapper.success)
                         {
                             //save localy
                             using (var ctx = new ApplicationDbContext())
@@ -420,7 +419,8 @@ namespace XML_WS_AgencyApp.Controllers
                                     From = lrVM.DateFrom,
                                     To = lrVM.DateTo,
                                     BookingUnit = myUnit,
-                                    TotalPrice = totalPrice
+                                    TotalPrice = totalPrice,
+                                    MainServerId = (long)alrResponse.responseWrapper.responseBody
                                 };
 
                                 //add the new item
@@ -433,7 +433,7 @@ namespace XML_WS_AgencyApp.Controllers
                         else
                         {
                             //some error happened, retry
-                            TempData["error"] = "Main server error";
+                            TempData["error"] = alrResponse.responseWrapper.message;
                             return RedirectToAction("LocalReservation", "Agent", new { bookingUnitId = lrVM.BookingUnitId });
                         }
 
@@ -456,7 +456,7 @@ namespace XML_WS_AgencyApp.Controllers
             }
         }
 
-        public async Task<ActionResult> SendMessageResponse(OpenedMessageViewModel omVM)
+        public ActionResult SendMessageResponse(OpenedMessageViewModel omVM)
         {
             if (!Request.IsAuthenticated)
                 return RedirectToAction("Login", "Account");
@@ -467,20 +467,19 @@ namespace XML_WS_AgencyApp.Controllers
                     //send a request on the main server and await for the response
                     long curentUserId = User.Identity.GetUserId<long>();
                     DTOHelper dtoHlp = new DTOHelper();
-                    Message_DTO msgDTO = dtoHlp.GetMessage_DTO(omVM, curentUserId);
-                    var xmlHelper = new XMLHelper();
-                    string xmlPayload = xmlHelper.SerializeToXml(msgDTO);
+                    MyRemoteServices.AgentEndpointPortClient aepc = new MyRemoteServices.AgentEndpointPortClient();
+                    MyRemoteServices.sendMessageRequest smRequest = dtoHlp.GetMessageRequest(omVM, curentUserId);
+                    MyRemoteServices.sendMessageResponse smResponse = aepc.sendMessage(smRequest);
 
-                    bool serverResp = true;
-
-                    if (serverResp)
+                    if (smResponse.responseWrapper.success)
                     {
                         //save localy
                         using (var ctx = new ApplicationDbContext())
                         {
                             ResponseMessage respMsg = new ResponseMessage
                             {
-                                Content = omVM.ResponseContent                                
+                                Content = omVM.ResponseContent,
+                                MainServerId = (long)smResponse.responseWrapper.responseBody
                             };
                             ctx.ResponseMessages.Add(respMsg);
 
@@ -494,7 +493,7 @@ namespace XML_WS_AgencyApp.Controllers
                     else
                     {
                         //some error happened, retry
-                        TempData["error"] = "Main server error";
+                        TempData["error"] = smResponse.responseWrapper.message;
                         return RedirectToAction("OpenMessage", "Agent", new { messageId = omVM.Id });
                     }
 
@@ -510,7 +509,7 @@ namespace XML_WS_AgencyApp.Controllers
             }
         }
 
-        public async Task<ActionResult> ConfirmReservation(long reservationID)
+        public ActionResult ConfirmReservation(long reservationID)
         {
             if (!Request.IsAuthenticated)
                 return RedirectToAction("Login", "Account");
@@ -520,13 +519,11 @@ namespace XML_WS_AgencyApp.Controllers
                 {
                     //send a request on the main server and await for the response
                     DTOHelper dtoHlp = new DTOHelper();
-                    ReservationStatus_DTO rsDTO = dtoHlp.GetReservationStatus_DTO(reservationID, ReservationStatus.CONFIRMED);
-                    var xmlHelper = new XMLHelper();
-                    string xmlPayload = xmlHelper.SerializeToXml(rsDTO);
+                    MyRemoteServices.AgentEndpointPortClient aepc = new MyRemoteServices.AgentEndpointPortClient();
+                    MyRemoteServices.confirmReservationRequest crRequest = dtoHlp.GetConfirmReservationRequest(reservationID, ReservationStatus.CONFIRMED);
+                    MyRemoteServices.confirmReservationResponse crResponse = aepc.confirmReservation(crRequest);
 
-                    bool serverResp = true;
-
-                    if (serverResp)
+                    if (crResponse.responseWrapper.success)
                     {
                         //save localy
                         using (var ctx = new ApplicationDbContext())
@@ -539,7 +536,7 @@ namespace XML_WS_AgencyApp.Controllers
                     else
                     {
                         //some error happened, retry
-                        TempData["error"] = "Main server error";
+                        TempData["error"] = crResponse.responseWrapper.message;
                         return RedirectToAction("MyReservations", "Agent");
                     }
 
@@ -555,7 +552,7 @@ namespace XML_WS_AgencyApp.Controllers
             }
         }
 
-        public async Task<ActionResult> CancelReservation(long reservationID)
+        public ActionResult CancelReservation(long reservationID)
         {
             if (!Request.IsAuthenticated)
                 return RedirectToAction("Login", "Account");
@@ -565,13 +562,11 @@ namespace XML_WS_AgencyApp.Controllers
                 {
                     //send a request on the main server and await for the response
                     DTOHelper dtoHlp = new DTOHelper();
-                    ReservationStatus_DTO rsDTO = dtoHlp.GetReservationStatus_DTO(reservationID, ReservationStatus.CANCELED);
-                    var xmlHelper = new XMLHelper();
-                    string xmlPayload = xmlHelper.SerializeToXml(rsDTO);
+                    MyRemoteServices.AgentEndpointPortClient aepc = new MyRemoteServices.AgentEndpointPortClient();
+                    MyRemoteServices.cancelReservationRequest crRequest = dtoHlp.GetCancelReservationRequest(reservationID, ReservationStatus.CANCELED);
+                    MyRemoteServices.cancelReservationResponse crResponse = aepc.cancelReservation(crRequest);
 
-                    bool serverResp = true;
-
-                    if (serverResp)
+                    if (crResponse.responseWrapper.success)
                     {
                         //save localy
                         using (var ctx = new ApplicationDbContext())
@@ -584,7 +579,7 @@ namespace XML_WS_AgencyApp.Controllers
                     else
                     {
                         //some error happened, retry
-                        TempData["error"] = "Main server error";
+                        TempData["error"] = crResponse.responseWrapper.message;
                         return RedirectToAction("MyReservations", "Agent");
                     }
 
