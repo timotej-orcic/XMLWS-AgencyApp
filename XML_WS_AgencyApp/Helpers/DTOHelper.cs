@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
 using XML_WS_AgencyApp.Models;
-using XML_WS_AgencyApp.Models_DTO;
 
 namespace XML_WS_AgencyApp.Helpers
 {

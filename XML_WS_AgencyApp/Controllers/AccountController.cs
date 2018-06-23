@@ -74,49 +74,38 @@ namespace XML_WS_AgencyApp.Controllers
                 return View(model);
             }
 
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var user = UserManager.FindByEmail(model.Email);
-            if (user == null)
+            //send a remote server login request
+            MyRemoteServices.AgentEndpointPortClient aepClient = new MyRemoteServices.AgentEndpointPortClient();
+            MyRemoteServices.agentLoginRequest rmsRequest = new MyRemoteServices.agentLoginRequest
             {
-                ModelState.AddModelError("", "User with that email is not registered.");
-                return View(model);
+                userName = model.UserName,
+                password = model.Password
+            };
+            MyRemoteServices.agentLoginResponse rmsRespone = aepClient.agentLogin(rmsRequest);
+
+            if (rmsRespone.responseWrapper.success)
+            {
+                //local login
+                var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, false, shouldLockout: false);
+                switch (result)
+                {
+                    case SignInStatus.Success:
+                        {
+                            //synchronization
+                            string syncMessage = SynchronizationHelper.DoSynchronization((MyRemoteServices.SinchronizationObject)rmsRespone.responseWrapper.responseBody);
+                            TempData["success"] = syncMessage;
+                            return RedirectToAction("AgentPage", "Agent");
+                        }
+                    case SignInStatus.Failure:
+                    default:
+                        ModelState.AddModelError("", "Invalid login attempt.");
+                        return View(model);
+                }
             }
             else
             {
-                //send a remote server login request
-                MyRemoteServices.AgentEndpointPortClient aepClient = new MyRemoteServices.AgentEndpointPortClient();
-                MyRemoteServices.agentLoginRequest rmsRequest = new MyRemoteServices.agentLoginRequest
-                {
-                    userName = user.UserName,
-                    password = model.Password
-                };
-                MyRemoteServices.agentLoginResponse rmsRespone = aepClient.agentLogin(rmsRequest);
-
-                if(rmsRespone.responseWrapper.success)
-                {
-                    //local login
-                    var result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, false, shouldLockout: false);
-                    switch (result)
-                    {
-                        case SignInStatus.Success:
-                            {
-                                //synchronization
-                                string syncMessage = SynchronizationHelper.DoSynchronization((MyRemoteServices.SinchronizationObject)rmsRespone.responseWrapper.responseBody);
-                                TempData["success"] = syncMessage;
-                                return RedirectToAction("AgentPage", "Agent");
-                            }
-                        case SignInStatus.Failure:
-                        default:
-                            ModelState.AddModelError("", "Invalid login attempt.");
-                            return View(model);
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError("", rmsRespone.responseWrapper.message);
-                    return View(model);
-                }
+                ModelState.AddModelError("", rmsRespone.responseWrapper.message);
+                return View(model);
             }
         }       
 

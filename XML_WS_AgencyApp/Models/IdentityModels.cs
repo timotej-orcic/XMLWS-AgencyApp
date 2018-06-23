@@ -101,7 +101,7 @@ namespace XML_WS_AgencyApp.Models
                         UserName = "MainAdmin",
                         MainServerId = 0
                     };
-                    admin = await um.CreateAsync(mainAdmin, "MAdmin123!");
+                    admin = await um.CreateAsync(mainAdmin, "123456");
                 }
             }
         }
