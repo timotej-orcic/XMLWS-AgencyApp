@@ -11,7 +11,7 @@
       </xs:element>
       <xs:complexType name="MonthlyPrices">
         <xs:sequence>
-          <xs:element name="newElement" type="xs:long" />
+          <xs:element name="mainServerId" type="xs:long" />
           <xs:element name="year" type="xs:int" />
           <xs:element minOccurs="1" maxOccurs="unbounded" name="monthlyPrices" type="xs:double" />
         </xs:sequence>
@@ -229,7 +229,7 @@
       <xs:element name="agentLoginResponse">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="sincObject" type="tns:SinchronizationObject" />
+            <xs:element name="responseWrapper" type="tns:ResponseWrapper" />
           </xs:sequence>
         </xs:complexType>
       </xs:element>
@@ -375,7 +375,7 @@
   </wsdl:binding>
   <wsdl:service name="AgentEndpointPortService">
     <wsdl:port name="AgentEndpointPortSoap11" binding="tns:AgentEndpointPortSoap11">
-      <soap:address location="http://localhost:9090/soapWS" />
+      <soap:address location="http://localhost:8081/agentEndpoint" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

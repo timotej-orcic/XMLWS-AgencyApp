@@ -34,7 +34,7 @@ namespace XML_WS_AgencyApp.Helpers
             return retVal;
         }
 
-        /*public MyRemoteServices.addBookingUnitRequest GetBookingUnitRequest(AddNewBookingUnitViewModel anbuVM, long curentUserId)
+        public MyRemoteServices.addBookingUnitRequest GetBookingUnitRequest(AddNewBookingUnitViewModel anbuVM, long curentUserId)
         {
             using (var ctx = new ApplicationDbContext())
             {
@@ -44,7 +44,7 @@ namespace XML_WS_AgencyApp.Helpers
                 long agentId = (long)ctx.Users.FirstOrDefault(x => x.Id == curentUserId).MainServerId;
 
                 int bfCnt = anbuVM.BonusFeatures.Count;
-                long?[] bonusFeaturesIds = new long?[bfCnt];
+                long[] bonusFeaturesIds = new long[bfCnt];
                 for(int i = 0; i < bfCnt; i++)
                 {
                     var bonusFeature = anbuVM.BonusFeatures[i];
@@ -57,7 +57,8 @@ namespace XML_WS_AgencyApp.Helpers
                 }
 
                 int imgCnt = anbuVM.Images.Length;
-                for(int i = 0; i < imgCnt; i++)
+                MyRemoteServices.hMapStringStringElement[] base64ImagesList = new MyRemoteServices.hMapStringStringElement[imgCnt];
+                for (int i = 0; i < imgCnt; i++)
                 {
                     var file = anbuVM.Images[i];
                     string imgName = file.FileName;
@@ -67,22 +68,35 @@ namespace XML_WS_AgencyApp.Helpers
                         thePictureAsBytes = reader.ReadBytes(file.ContentLength);
                     }
                     string thePictureDataAsString = Convert.ToBase64String(thePictureAsBytes);
-                    base64ImagesList[i] = new MyRemoteServices.bookingUnitDTOEntry
+                    base64ImagesList[i] = new MyRemoteServices.hMapStringStringElement
                     {
                         key = imgName,
                         value = thePictureDataAsString
                     };
                 }
 
+                MyRemoteServices.BookingUnit unit = new MyRemoteServices.BookingUnit
+                {
+                    cityMainServerId = cityId,
+                    accCategoryMainServerId = accCatId,
+                    accTypeMainServerId = accTypeId,
+                    address = anbuVM.Address,
+                    agentMainServerId = agentId,
+                    bonusFeaturesMainServerIds = bonusFeaturesIds,
+                    description = anbuVM.Description,
+                    name = anbuVM.Name,
+                    peopleNo = anbuVM.PeopleNo,
+                    base64ImagesList = base64ImagesList
+                };
 
                 MyRemoteServices.addBookingUnitRequest retObj = new MyRemoteServices.addBookingUnitRequest
                 {
-                    
+                    bookingUnit = unit
                 };
 
                 return retObj;
             }
-        }*/
+        }
 
         public MonthlyPrices_DTO GetMonthlyPrices_DTO(MonthlyPricesViewModel mpVM)
         {

@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using XML_WS_AgencyApp.Models;
+using XML_WS_AgencyApp.Helpers;
 
 namespace XML_WS_AgencyApp.Controllers
 {
@@ -73,9 +74,6 @@ namespace XML_WS_AgencyApp.Controllers
                 return View(model);
             }
 
-            /*DODATI PROVERU NA GLAVNOM BACKEND-u*/
-
-
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var user = UserManager.FindByEmail(model.Email);
@@ -86,15 +84,38 @@ namespace XML_WS_AgencyApp.Controllers
             }
             else
             {
-                var result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, false, shouldLockout: false);
-                switch (result)
+                //send a remote server login request
+                MyRemoteServices.AgentEndpointPortClient aepClient = new MyRemoteServices.AgentEndpointPortClient();
+                MyRemoteServices.agentLoginRequest rmsRequest = new MyRemoteServices.agentLoginRequest
                 {
-                    case SignInStatus.Success:
-                        return RedirectToAction("AgentPage", "Agent");
-                    case SignInStatus.Failure:
-                    default:
-                        ModelState.AddModelError("", "Invalid login attempt.");
-                        return View(model);
+                    userName = user.UserName,
+                    password = model.Password
+                };
+                MyRemoteServices.agentLoginResponse rmsRespone = aepClient.agentLogin(rmsRequest);
+
+                if(rmsRespone.responseWrapper.success)
+                {
+                    //local login
+                    var result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, false, shouldLockout: false);
+                    switch (result)
+                    {
+                        case SignInStatus.Success:
+                            {
+                                //synchronization
+                                string syncMessage = SynchronizationHelper.DoSynchronization((MyRemoteServices.SinchronizationObject)rmsRespone.responseWrapper.responseBody);
+                                TempData["success"] = syncMessage;
+                                return RedirectToAction("AgentPage", "Agent");
+                            }
+                        case SignInStatus.Failure:
+                        default:
+                            ModelState.AddModelError("", "Invalid login attempt.");
+                            return View(model);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", rmsRespone.responseWrapper.message);
+                    return View(model);
                 }
             }
         }       

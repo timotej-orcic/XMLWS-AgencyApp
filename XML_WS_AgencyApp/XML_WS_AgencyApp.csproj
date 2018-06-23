@@ -218,6 +218,7 @@
     <Compile Include="Helpers\MessagesDisplayRepo.cs" />
     <Compile Include="Helpers\ReservationsRepository.cs" />
     <Compile Include="Helpers\SOAPHelper.cs" />
+    <Compile Include="Helpers\SynchronizationHelper.cs" />
     <Compile Include="Helpers\TotalPriceCalculator.cs" />
     <Compile Include="Helpers\XMLHelper.cs" />
     <Compile Include="Initializer.cs" />
@@ -356,7 +357,7 @@
     <Content Include="Views\Agent\ClientMessaging.cshtml" />
     <Content Include="Views\Agent\OpenMessage.cshtml" />
     <Content Include="Views\Agent\MyReservations.cshtml" />
-    <None Include="Service References\MyRemoteServices\agentEndpoint.wsdl" />
+    <None Include="Service References\MyRemoteServices\gimmewsdl.wsdl" />
     <Content Include="Service References\MyRemoteServices\XML_WS_AgencyApp.MyRemoteServices.addBookingUnitResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>

@@ -164,7 +164,7 @@ namespace XML_WS_AgencyApp.Controllers
 
                         //send a request on the main server and await for the response
                         MyRemoteServices.AgentEndpointPortClient aepc = new MyRemoteServices.AgentEndpointPortClient();
-                        //MyRemoteServices.addBookingUnitRequest abuRequest = dtoHlp.GetBookingUnitRequest(anbuVM, curentUserId);
+                        MyRemoteServices.addBookingUnitRequest abuRequest = dtoHlp.GetBookingUnitRequest(anbuVM, curentUserId);
                         MyRemoteServices.addBookingUnitResponse abuResponse = aepc.addBookingUnit(abuRequest);
 
 

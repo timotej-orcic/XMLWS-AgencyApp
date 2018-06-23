@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="638c5eeb-0cb0-4c17-b5b0-fc94c0dd5737" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="686258f4-a949-4c34-9353-8e8e4a4412dd" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -19,10 +19,10 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://localhost:9090/soapWS/agentEndpoint.wsdl" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost:8081/agentEndpoint/gimmewsdl.wsdl" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="agentEndpoint.wsdl" MetadataType="Wsdl" ID="22d9d994-9ff7-4b04-b83f-484c9667f17d" SourceId="1" SourceUrl="http://localhost:9090/soapWS/agentEndpoint.wsdl" />
+    <MetadataFile FileName="gimmewsdl.wsdl" MetadataType="Wsdl" ID="aee1696c-19f2-4adc-9e73-84a45878f908" SourceId="1" SourceUrl="http://localhost:8081/agentEndpoint/gimmewsdl.wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
