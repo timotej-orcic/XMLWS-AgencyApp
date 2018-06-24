@@ -17,16 +17,19 @@ namespace XML_WS_AgencyApp.Helpers
                                 .ToList();
 
                 List<MessageViewModel> retList = new List<MessageViewModel>();
-                foreach (var m in messages)
+                if(messages.Count > 0)
                 {
-                    retList.Add(
-                        new MessageViewModel
-                        {
-                            Id = m.Id,
-                            SenderUserName = m.RegisteredUserInfo.UserName,
-                            IsRead = m.IsRead
-                        }
-                    );
+                    foreach (var m in messages)
+                    {
+                        retList.Add(
+                            new MessageViewModel
+                            {
+                                Id = m.Id,
+                                SenderUserName = m.RegisteredUserInfo.UserName,
+                                IsRead = m.IsRead
+                            }
+                        );
+                    }
                 }
 
                 return retList;
@@ -72,30 +75,6 @@ namespace XML_WS_AgencyApp.Helpers
                 }
 
                 return retVM;
-            }
-        }
-
-        public void AddInitialMessages(long currentUserId)
-        {
-            using (var ctx = new ApplicationDbContext())
-            {
-                if(ctx.Messages.FirstOrDefault(x => x.AgentUserId == currentUserId) == null)
-                {
-                    RegisteredUserInfo regUsr = ctx.RegisteredUsersInfo.FirstOrDefault();
-
-                    Message msg = new Message
-                    {
-                        AgentUserId = currentUserId,
-                        RegisteredUserInfo = regUsr,
-                        Content = "Dje si kralju!!!",
-                        IsRead = false,
-                        HasResponse = false,
-                        ResponseMessage = null
-                    };
-
-                    ctx.Messages.Add(msg);
-                    ctx.SaveChanges();
-                }
             }
         }
     }

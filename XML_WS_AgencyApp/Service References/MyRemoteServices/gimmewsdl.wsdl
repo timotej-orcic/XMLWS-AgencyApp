@@ -27,7 +27,7 @@
         <xs:sequence>
           <xs:element name="sucess" type="xs:boolean" />
           <xs:element name="message" type="xs:string" />
-          <xs:element name="mainServerId" type="xs:long" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="mainServerId" type="xs:long" />
         </xs:sequence>
       </xs:complexType>
       <xs:element name="manageMonthlyPricesResponse">

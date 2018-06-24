@@ -1214,7 +1214,7 @@ namespace XML_WS_AgencyApp.MyRemoteServices {
         
         private string messageField;
         
-        private long mainServerIdField;
+        private long[] mainServerIdField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
@@ -1241,8 +1241,8 @@ namespace XML_WS_AgencyApp.MyRemoteServices {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
-        public long mainServerId {
+        [System.Xml.Serialization.XmlElementAttribute("mainServerId", Order=2)]
+        public long[] mainServerId {
             get {
                 return this.mainServerIdField;
             }

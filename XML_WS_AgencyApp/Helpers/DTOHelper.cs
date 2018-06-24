@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -32,7 +33,7 @@ namespace XML_WS_AgencyApp.Helpers
             return retVal;
         }
 
-        public MyRemoteServices.addBookingUnitRequest GetBookingUnitRequest(AddNewBookingUnitViewModel anbuVM, long curentUserId)
+        public MyRemoteServices.addBookingUnitRequest GetBookingUnitRequest(AddNewBookingUnitViewModel anbuVM, long curentUserId, List<byte[]> myImages)
         {
             using (var ctx = new ApplicationDbContext())
             {
@@ -58,20 +59,18 @@ namespace XML_WS_AgencyApp.Helpers
                     }
                 }
                 else
-                    bonusFeaturesIds = null;
+                {
+                    bonusFeaturesIds = new long[1];
+                    bonusFeaturesIds[0] = -1;
+                }
 
                 int imgCnt = anbuVM.Images.Length;
                 MyRemoteServices.hMapStringStringElement[] base64ImagesList = new MyRemoteServices.hMapStringStringElement[imgCnt];
                 for (int i = 0; i < imgCnt; i++)
                 {
                     var file = anbuVM.Images[i];
-                    string imgName = file.FileName;
-                    byte[] thePictureAsBytes = new byte[file.ContentLength];
-                    using (BinaryReader reader = new BinaryReader(file.InputStream))
-                    {
-                        thePictureAsBytes = reader.ReadBytes(file.ContentLength);
-                    }
-                    string thePictureDataAsString = Convert.ToBase64String(thePictureAsBytes);
+                    string imgName = file.FileName;                   
+                    string thePictureDataAsString = Convert.ToBase64String(myImages[i]);
                     base64ImagesList[i] = new MyRemoteServices.hMapStringStringElement
                     {
                         key = imgName,
@@ -143,16 +142,22 @@ namespace XML_WS_AgencyApp.Helpers
             using (var ctx = new ApplicationDbContext())
             {
                 long bookingUnitId = (long)ctx.BookingUnits.FirstOrDefault(x => x.Id == lrVM.BookingUnitId).MainServerId;
-                string dateFrom = string.Format("{0}/{1}/{2}", lrVM.DateFrom.Year, lrVM.DateFrom.Month, lrVM.DateFrom.Day);
-                string dateTo = string.Format("{0}/{1}/{2}", lrVM.DateTo.Year, lrVM.DateTo.Month, lrVM.DateTo.Day);
+                string dateFrom = string.Format("{0}-{1}-{2}", lrVM.DateFrom.Year, lrVM.DateFrom.Month, lrVM.DateFrom.Day);
+                string dateTo = string.Format("{0}-{1}-{2}", lrVM.DateTo.Year, lrVM.DateTo.Month, lrVM.DateTo.Day);
+                string firstName = "";
+                if (lrVM.ReserveeFirstName != null)
+                    firstName = lrVM.ReserveeFirstName;
+                string lastName = "";
+                if (lrVM.ReserveeLastName != null)
+                    lastName = lrVM.ReserveeLastName;
 
                 MyRemoteServices.Reservation resData = new MyRemoteServices.Reservation
                 {
                     bookingUnitMainServerId = bookingUnitId,
                     dateFrom = dateFrom,
                     dateTo = dateTo,
-                    reserveeFirstName = lrVM.ReserveeFirstName,
-                    reserveeLastName = lrVM.ReserveeLastName
+                    reserveeFirstName = firstName,
+                    reserveeLastName = lastName
                 };
 
                 MyRemoteServices.addLocalReservationRequest retObj = new MyRemoteServices.addLocalReservationRequest
@@ -173,7 +178,7 @@ namespace XML_WS_AgencyApp.Helpers
 
                 MyRemoteServices.Message msgData = new MyRemoteServices.Message
                 {
-                    content = omVM.Content,
+                    content = omVM.ResponseContent,
                     senderAgentMainServerId = agentId,
                     receiverUserMainServerId = userReceiverId
                 };

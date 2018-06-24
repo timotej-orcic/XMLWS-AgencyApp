@@ -215,12 +215,11 @@
     <Compile Include="Helpers\CitiesRepository.cs" />
     <Compile Include="Helpers\CountriesRepository.cs" />
     <Compile Include="Helpers\DTOHelper.cs" />
+    <Compile Include="Helpers\MemoryPostedFile.cs" />
     <Compile Include="Helpers\MessagesDisplayRepo.cs" />
     <Compile Include="Helpers\ReservationsRepository.cs" />
-    <Compile Include="Helpers\SOAPHelper.cs" />
     <Compile Include="Helpers\SynchronizationHelper.cs" />
     <Compile Include="Helpers\TotalPriceCalculator.cs" />
-    <Compile Include="Helpers\XMLHelper.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="Models\AccomodationCategory.cs" />
     <Compile Include="Models\AccomodationType.cs" />

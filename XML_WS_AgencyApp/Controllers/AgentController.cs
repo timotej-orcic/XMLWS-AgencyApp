@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using XML_WS_AgencyApp.Helpers;
 using XML_WS_AgencyApp.Models;
@@ -13,36 +14,13 @@ namespace XML_WS_AgencyApp.Controllers
 {
     public class AgentController : Controller
     {
-        public static readonly string SOAP_URL = "http://localhost:9090/soap-api/agentEndpointService";
-
         // GET: AgentPage
         public ActionResult AgentPage()
         {
             if (!Request.IsAuthenticated)
                 return RedirectToAction("Login", "Account");
             else
-            {
-                /*DTOHelper dtoHlp = new DTOHelper();
-                MyRemoteServices.AgentEndpointPortClient aepc = new MyRemoteServices.AgentEndpointPortClient();
-
-                double[] myMonths = new double[12];
-                for (var i = 0; i < 12; i++)
-                    myMonths[i] = 300;
-                MyRemoteServices.MonthlyPrices prices = new MyRemoteServices.MonthlyPrices
-                {
-                    mainServerId = 1,
-                    monthlyPrices = myMonths,
-                    year = 2018
-                };
-
-                MyRemoteServices.manageMonthlyPricesRequest retObj = new MyRemoteServices.manageMonthlyPricesRequest
-                {
-                    monthlyPrice = prices
-                };
-                MyRemoteServices.manageMonthlyPricesResponse ampResponse = aepc.manageMonthlyPrices(retObj);
-                string msg = ampResponse.responseWrapper.message;*/
                 return View();
-            }
         }
 
         // GET: AddNewBookingUnit
@@ -129,10 +107,6 @@ namespace XML_WS_AgencyApp.Controllers
             {
                 MessagesDisplayRepo msgdRepo = new MessagesDisplayRepo();
                 long currentUserId = User.Identity.GetUserId<long>();
-
-                //mocking the initial messages
-                msgdRepo.AddInitialMessages(currentUserId);
-
                 var model = new ClientMessagingViewModel();
                 model.ReceivedMessages = msgdRepo.GetMessages(currentUserId);
                 return View(model);
@@ -181,11 +155,20 @@ namespace XML_WS_AgencyApp.Controllers
 
                     if(imgValidation)
                     {
+                        List<byte[]> imagesCopy = new List<byte[]>();
+                        foreach (var img in anbuVM.Images)
+                        {
+                            MemoryStream target = new MemoryStream();
+                            img.InputStream.CopyTo(target);
+                            byte[] data = target.ToArray();
+                            imagesCopy.Add(data);
+                        }
+
                         long curentUserId = User.Identity.GetUserId<long>();
 
                         //send a request on the main server and await for the response
                         MyRemoteServices.AgentEndpointPortClient aepc = new MyRemoteServices.AgentEndpointPortClient();
-                        MyRemoteServices.addBookingUnitRequest abuRequest = dtoHlp.GetBookingUnitRequest(anbuVM, curentUserId);
+                        MyRemoteServices.addBookingUnitRequest abuRequest = dtoHlp.GetBookingUnitRequest(anbuVM, curentUserId, imagesCopy);
                         MyRemoteServices.addBookingUnitResponse abuResponse = aepc.addBookingUnit(abuRequest);
 
 
@@ -233,7 +216,7 @@ namespace XML_WS_AgencyApp.Controllers
 
                                 //get uploaded images and save them on the server
                                 var uploadDir = "~/uploadedImages";
-
+                                var cnt = 0;
                                 foreach (var imgUpl in anbuVM.Images)
                                 {
                                     string newFileName = string.Concat(Path.GetFileNameWithoutExtension(imgUpl.FileName)
@@ -241,7 +224,8 @@ namespace XML_WS_AgencyApp.Controllers
                                                                     , Path.GetExtension(imgUpl.FileName)
                                                                         );
                                     var imagePath = Path.Combine(Server.MapPath(uploadDir), newFileName);
-                                    imgUpl.SaveAs(imagePath);
+
+                                    System.IO.File.WriteAllBytes(imagePath, imagesCopy[cnt].ToArray());
 
                                     var imageUrl = Path.Combine(uploadDir, newFileName);
                                     BookingUnitPicture newPicture = new BookingUnitPicture
@@ -250,6 +234,7 @@ namespace XML_WS_AgencyApp.Controllers
                                         Value = imageUrl
                                     };
                                     ctx.Pictures.Add(newPicture);
+                                    cnt++;
                                 }
 
                                 //save changes

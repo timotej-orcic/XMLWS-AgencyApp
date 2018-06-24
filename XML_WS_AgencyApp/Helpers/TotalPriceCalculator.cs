@@ -36,11 +36,18 @@ namespace XML_WS_AgencyApp.Helpers
                                     .ToList();
                 }
 
-                double retVal = 0;
-                foreach (var tuple in yr_mnth_daysCnt)
+
+                double retVal = -1;
+                if(queryData != null)
                 {
-                    double currentPrice = queryData.FirstOrDefault(x => x.Year == tuple.Item1 && x.Month == tuple.Item2).Amount;
-                    retVal += currentPrice * tuple.Item3;
+                    if(queryData.Count > 0)
+                    {
+                        foreach (var tuple in yr_mnth_daysCnt)
+                        {
+                            double currentPrice = queryData.FirstOrDefault(x => x.Year == tuple.Item1 && x.Month == tuple.Item2).Amount;
+                            retVal += currentPrice * tuple.Item3;
+                        }
+                    }
                 }
 
                 return retVal;
