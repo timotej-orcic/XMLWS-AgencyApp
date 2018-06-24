@@ -41,18 +41,24 @@ namespace XML_WS_AgencyApp.Helpers
                 long accTypeId = (long)ctx.AccomodationTypes.FirstOrDefault(x => x.Id.ToString() == anbuVM.AccomodationTypeId).MainServerId;
                 long agentId = (long)ctx.Users.FirstOrDefault(x => x.Id == curentUserId).MainServerId;
 
-                int bfCnt = anbuVM.BonusFeatures.Count;
-                long[] bonusFeaturesIds = new long[bfCnt];
-                for(int i = 0; i < bfCnt; i++)
+                long[] bonusFeaturesIds;
+                if (anbuVM.BonusFeatures != null)
                 {
-                    var bonusFeature = anbuVM.BonusFeatures[i];
-                    if (bonusFeature.IsSelected)
+                    int bfCnt = anbuVM.BonusFeatures.Count;
+                    bonusFeaturesIds = new long[bfCnt];
+                    for (int i = 0; i < bfCnt; i++)
                     {
-                        long currentId = bonusFeature.Id;
-                        long bfId = (long)ctx.BonusFeatures.FirstOrDefault(x => x.Id == currentId).MainServerId;
-                        bonusFeaturesIds[i] = bfId;
+                        var bonusFeature = anbuVM.BonusFeatures[i];
+                        if (bonusFeature.IsSelected)
+                        {
+                            long currentId = bonusFeature.Id;
+                            long bfId = (long)ctx.BonusFeatures.FirstOrDefault(x => x.Id == currentId).MainServerId;
+                            bonusFeaturesIds[i] = bfId;
+                        }
                     }
                 }
+                else
+                    bonusFeaturesIds = null;
 
                 int imgCnt = anbuVM.Images.Length;
                 MyRemoteServices.hMapStringStringElement[] base64ImagesList = new MyRemoteServices.hMapStringStringElement[imgCnt];

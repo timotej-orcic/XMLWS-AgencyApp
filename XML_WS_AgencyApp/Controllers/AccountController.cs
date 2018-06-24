@@ -83,7 +83,8 @@ namespace XML_WS_AgencyApp.Controllers
             };
             MyRemoteServices.agentLoginResponse rmsRespone = aepClient.agentLogin(rmsRequest);
 
-            if (rmsRespone.responseWrapper.success)
+            //if (rmsRespone.responseWrapper.success)
+            if(rmsRespone.responseWrapper.success)
             {
                 //local login
                 var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, false, shouldLockout: false);
@@ -92,7 +93,7 @@ namespace XML_WS_AgencyApp.Controllers
                     case SignInStatus.Success:
                         {
                             //synchronization
-                            string syncMessage = SynchronizationHelper.DoSynchronization((MyRemoteServices.SinchronizationObject)rmsRespone.responseWrapper.responseBody);
+                            string syncMessage = SynchronizationHelper.DoSynchronization(rmsRespone.responseWrapper.syncObj);
                             TempData["success"] = syncMessage;
                             return RedirectToAction("AgentPage", "Agent");
                         }
@@ -104,7 +105,7 @@ namespace XML_WS_AgencyApp.Controllers
             }
             else
             {
-                ModelState.AddModelError("", rmsRespone.responseWrapper.message);
+                //ModelState.AddModelError("", rmsRespone.responseWrapper.message);
                 return View(model);
             }
         }       

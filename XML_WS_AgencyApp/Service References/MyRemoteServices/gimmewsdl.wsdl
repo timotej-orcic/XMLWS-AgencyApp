@@ -23,10 +23,17 @@
           <xs:element name="responseBody" type="xs:anyType" />
         </xs:sequence>
       </xs:complexType>
+      <xs:complexType name="ResponseWrapperLong">
+        <xs:sequence>
+          <xs:element name="sucess" type="xs:boolean" />
+          <xs:element name="message" type="xs:string" />
+          <xs:element name="mainServerId" type="xs:long" />
+        </xs:sequence>
+      </xs:complexType>
       <xs:element name="manageMonthlyPricesResponse">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="responseWrapper" type="tns:ResponseWrapper" />
+            <xs:element name="responseWrapper" type="tns:ResponseWrapperLong" />
           </xs:sequence>
         </xs:complexType>
       </xs:element>
@@ -226,10 +233,17 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
+      <xs:complexType name="responseWrapperSync">
+        <xs:sequence>
+          <xs:element name="success" type="xs:boolean" />
+          <xs:element name="message" type="xs:string" />
+          <xs:element name="syncObj" type="tns:SinchronizationObject" />
+        </xs:sequence>
+      </xs:complexType>
       <xs:element name="agentLoginResponse">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="responseWrapper" type="tns:ResponseWrapper" />
+            <xs:element name="responseWrapper" type="tns:responseWrapperSync" />
           </xs:sequence>
         </xs:complexType>
       </xs:element>

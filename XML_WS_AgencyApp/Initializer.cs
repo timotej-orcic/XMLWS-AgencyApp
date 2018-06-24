@@ -2,7 +2,7 @@
 
 namespace XML_WS_AgencyApp
 {
-    public class Initializer : System.Data.Entity.DropCreateDatabaseAlways<ApplicationDbContext>
+    public class Initializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<ApplicationDbContext>
     {
         public Initializer()
         {
@@ -10,7 +10,7 @@ namespace XML_WS_AgencyApp
 
         protected override void Seed(ApplicationDbContext ctx)
         {
-            Country srb = new Country
+            /*Country srb = new Country
             {
                 Name = "Srbija",
                 MainServerId = 0
@@ -178,7 +178,7 @@ namespace XML_WS_AgencyApp
 
             ctx.RegisteredUsersInfo.Add(regUsr);
 
-            ctx.SaveChanges();
+            ctx.SaveChanges();*/
         }
     }
 }

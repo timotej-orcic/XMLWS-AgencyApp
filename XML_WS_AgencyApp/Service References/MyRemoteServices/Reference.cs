@@ -18,7 +18,6 @@ namespace XML_WS_AgencyApp.MyRemoteServices {
         // CODEGEN: Generating message contract since the operation addBookingUnit is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SinchronizationObject))]
         XML_WS_AgencyApp.MyRemoteServices.addBookingUnitResponse1 addBookingUnit(XML_WS_AgencyApp.MyRemoteServices.addBookingUnitRequest1 request);
         
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
@@ -27,7 +26,6 @@ namespace XML_WS_AgencyApp.MyRemoteServices {
         // CODEGEN: Generating message contract since the operation cancelReservation is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SinchronizationObject))]
         XML_WS_AgencyApp.MyRemoteServices.cancelReservationResponse1 cancelReservation(XML_WS_AgencyApp.MyRemoteServices.cancelReservationRequest1 request);
         
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
@@ -36,7 +34,6 @@ namespace XML_WS_AgencyApp.MyRemoteServices {
         // CODEGEN: Generating message contract since the operation addLocalReservation is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SinchronizationObject))]
         XML_WS_AgencyApp.MyRemoteServices.addLocalReservationResponse1 addLocalReservation(XML_WS_AgencyApp.MyRemoteServices.addLocalReservationRequest1 request);
         
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
@@ -45,7 +42,6 @@ namespace XML_WS_AgencyApp.MyRemoteServices {
         // CODEGEN: Generating message contract since the operation sendMessage is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SinchronizationObject))]
         XML_WS_AgencyApp.MyRemoteServices.sendMessageResponse1 sendMessage(XML_WS_AgencyApp.MyRemoteServices.sendMessageRequest1 request);
         
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
@@ -54,7 +50,6 @@ namespace XML_WS_AgencyApp.MyRemoteServices {
         // CODEGEN: Generating message contract since the operation confirmReservation is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SinchronizationObject))]
         XML_WS_AgencyApp.MyRemoteServices.confirmReservationResponse1 confirmReservation(XML_WS_AgencyApp.MyRemoteServices.confirmReservationRequest1 request);
         
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
@@ -63,7 +58,6 @@ namespace XML_WS_AgencyApp.MyRemoteServices {
         // CODEGEN: Generating message contract since the operation agentLogin is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SinchronizationObject))]
         XML_WS_AgencyApp.MyRemoteServices.agentLoginResponse1 agentLogin(XML_WS_AgencyApp.MyRemoteServices.agentLoginRequest1 request);
         
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
@@ -72,7 +66,6 @@ namespace XML_WS_AgencyApp.MyRemoteServices {
         // CODEGEN: Generating message contract since the operation manageMonthlyPrices is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SinchronizationObject))]
         XML_WS_AgencyApp.MyRemoteServices.manageMonthlyPricesResponse1 manageMonthlyPrices(XML_WS_AgencyApp.MyRemoteServices.manageMonthlyPricesRequest1 request);
         
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
@@ -302,6 +295,66 @@ namespace XML_WS_AgencyApp.MyRemoteServices {
             set {
                 this.valueField = value;
                 this.RaisePropertyChanged("value");
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.3056.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ftn-booking.com/agentEndpoint")]
+    public partial class responseWrapperSync : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private bool successField;
+        
+        private string messageField;
+        
+        private SinchronizationObject syncObjField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        public bool success {
+            get {
+                return this.successField;
+            }
+            set {
+                this.successField = value;
+                this.RaisePropertyChanged("success");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        public string message {
+            get {
+                return this.messageField;
+            }
+            set {
+                this.messageField = value;
+                this.RaisePropertyChanged("message");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
+        public SinchronizationObject syncObj {
+            get {
+                return this.syncObjField;
+            }
+            set {
+                this.syncObjField = value;
+                this.RaisePropertyChanged("syncObj");
             }
         }
         
@@ -1155,6 +1208,66 @@ namespace XML_WS_AgencyApp.MyRemoteServices {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ftn-booking.com/agentEndpoint")]
+    public partial class ResponseWrapperLong : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private bool sucessField;
+        
+        private string messageField;
+        
+        private long mainServerIdField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        public bool sucess {
+            get {
+                return this.sucessField;
+            }
+            set {
+                this.sucessField = value;
+                this.RaisePropertyChanged("sucess");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        public string message {
+            get {
+                return this.messageField;
+            }
+            set {
+                this.messageField = value;
+                this.RaisePropertyChanged("message");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
+        public long mainServerId {
+            get {
+                return this.mainServerIdField;
+            }
+            set {
+                this.mainServerIdField = value;
+                this.RaisePropertyChanged("mainServerId");
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.3056.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ftn-booking.com/agentEndpoint")]
     public partial class MonthlyPrices : object, System.ComponentModel.INotifyPropertyChanged {
         
         private long mainServerIdField;
@@ -1781,11 +1894,11 @@ namespace XML_WS_AgencyApp.MyRemoteServices {
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ftn-booking.com/agentEndpoint")]
     public partial class agentLoginResponse : object, System.ComponentModel.INotifyPropertyChanged {
         
-        private ResponseWrapper responseWrapperField;
+        private responseWrapperSync responseWrapperField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
-        public ResponseWrapper responseWrapper {
+        public responseWrapperSync responseWrapper {
             get {
                 return this.responseWrapperField;
             }
@@ -1879,11 +1992,11 @@ namespace XML_WS_AgencyApp.MyRemoteServices {
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ftn-booking.com/agentEndpoint")]
     public partial class manageMonthlyPricesResponse : object, System.ComponentModel.INotifyPropertyChanged {
         
-        private ResponseWrapper responseWrapperField;
+        private ResponseWrapperLong responseWrapperField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
-        public ResponseWrapper responseWrapper {
+        public ResponseWrapperLong responseWrapper {
             get {
                 return this.responseWrapperField;
             }

@@ -98,8 +98,8 @@ namespace XML_WS_AgencyApp.Models
                     {
                         Email = "main.admin@xml.com",
                         Pmb = "0123456789012",
-                        UserName = "MainAdmin",
-                        MainServerId = 0
+                        UserName = "zawaagent_user",
+                        MainServerId = 4
                     };
                     admin = await um.CreateAsync(mainAdmin, "123456");
                 }

@@ -21,7 +21,28 @@ namespace XML_WS_AgencyApp.Controllers
             if (!Request.IsAuthenticated)
                 return RedirectToAction("Login", "Account");
             else
+            {
+                /*DTOHelper dtoHlp = new DTOHelper();
+                MyRemoteServices.AgentEndpointPortClient aepc = new MyRemoteServices.AgentEndpointPortClient();
+
+                double[] myMonths = new double[12];
+                for (var i = 0; i < 12; i++)
+                    myMonths[i] = 300;
+                MyRemoteServices.MonthlyPrices prices = new MyRemoteServices.MonthlyPrices
+                {
+                    mainServerId = 1,
+                    monthlyPrices = myMonths,
+                    year = 2018
+                };
+
+                MyRemoteServices.manageMonthlyPricesRequest retObj = new MyRemoteServices.manageMonthlyPricesRequest
+                {
+                    monthlyPrice = prices
+                };
+                MyRemoteServices.manageMonthlyPricesResponse ampResponse = aepc.manageMonthlyPrices(retObj);
+                string msg = ampResponse.responseWrapper.message;*/
                 return View();
+            }
         }
 
         // GET: AddNewBookingUnit
@@ -180,13 +201,16 @@ namespace XML_WS_AgencyApp.Controllers
                                 AccomodationCategory myAccCat = ctx.AccomodationCategories.FirstOrDefault(x => x.Id.ToString() == anbuVM.AccomodationCategoryId);
 
                                 ICollection<BonusFeatures> myBonusFeatures = new List<BonusFeatures>();
-                                foreach (var bfvm in anbuVM.BonusFeatures)
+                                if(anbuVM.BonusFeatures != null)
                                 {
-                                    if (bfvm.IsSelected)
+                                    foreach (var bfvm in anbuVM.BonusFeatures)
                                     {
-                                        var myBFeature = ctx.BonusFeatures.FirstOrDefault(x => x.Id == bfvm.Id);
-                                        if (myBFeature != null)
-                                            myBonusFeatures.Add(myBFeature);
+                                        if (bfvm.IsSelected)
+                                        {
+                                            var myBFeature = ctx.BonusFeatures.FirstOrDefault(x => x.Id == bfvm.Id);
+                                            if (myBFeature != null)
+                                                myBonusFeatures.Add(myBFeature);
+                                        }
                                     }
                                 }
 
@@ -273,7 +297,7 @@ namespace XML_WS_AgencyApp.Controllers
                     MyRemoteServices.manageMonthlyPricesResponse ampResponse = aepc.manageMonthlyPrices(ampRequest);
 
                     bool isUpdate = false;
-                    if(ampResponse.responseWrapper.success)
+                    if(ampResponse.responseWrapper.sucess)
                     {
                         //save localy
                         using (var ctx = new ApplicationDbContext())
@@ -305,7 +329,7 @@ namespace XML_WS_AgencyApp.Controllers
                                 myMonths[10] = mpVM.NovemberPrice;
                                 myMonths[11] = mpVM.DecemberPrice;
 
-                                long[] myMainServedIds = (long[])ampResponse.responseWrapper.responseBody;
+                                //long[] myMainServedIds = (long[])ampResponse.responseWrapper.mainServerId;
 
                                 for (int i = 0; i < 12; i++)
                                 {
@@ -315,7 +339,7 @@ namespace XML_WS_AgencyApp.Controllers
                                         Month = i + 1,
                                         BookingUnit = myUnit,
                                         Amount = myMonths[i],
-                                        MainServerId = myMainServedIds[i]                                        
+                                        MainServerId = 1                                        
                                     };
                                     ctx.MonthlyPrices.Add(newMp);
                                 }
